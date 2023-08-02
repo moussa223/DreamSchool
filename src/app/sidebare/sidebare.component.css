@@ -1,36 +1,18 @@
-html,
-body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-
-}
-
-.dashboard {
-    display: flex;
-    height: auto; /* Ajout de la hauteur pour que le conteneur s'étende sur toute la page */
-}
 
 .sidebar {
     background-color: #0E1B21 !important;
     color: white;
-    width: 19%;
+    width: 250px;
     height: auto;
-
+    position: sticky; /* rendre le sidebare static ne bouge pas même si on scrolle */
+    top: 0; /* rendre le sidebare static ne bouge pas même si on scrolle */
 }
 
 /* Media query pour écran réduit */
 @media (max-width: 768px) {
-    .dashboard {
-        flex-direction: column;
-    }
-    body{
-        overflow-x: hidden; /* Ajoutez cette ligne pour masquer le défilement horizontal */
-    }
     .sidebar{
         width: 100%;
     }
-
 }
 #les-icones-sidebars{
     margin-left:20px;

@@ -4,20 +4,38 @@ import { BrowserModule  } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import {LoginComponent} from "./login/login.component";
+import {DashboardComponent} from "./dashboard/dashboard.component";
+import {SidebarComponent} from "./components/sidebar/sidebar.component";
+import {SidebareComponent} from "./sidebare/sidebare.component";
+import {TableauBordComponent} from "./tableau-bord/tableau-bord.component";
 
 const routes: Routes =[
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
-  }, {
-    path: '',
+    component: LoginComponent,
+  },
+  {
+    path: 'Dashboard',
+    component: DashboardComponent,
+  },
+  {
+    path: 'Admin',
     component: AdminLayoutComponent,
-    children: [{
-      path: '',
-      loadChildren: () => import('./layouts/admin-layout/admin-layout.module').then(m => m.AdminLayoutModule)
-    }]
-  }
+  },
+  {
+    path: 'Sidebar',
+    component: SidebarComponent,
+  },
+  {
+    path: 'Sidebare',
+    component: SidebareComponent,
+  },
+  {
+    path: 'Tableau',
+    component: TableauBordComponent,
+  },
+
 ];
 
 @NgModule({
@@ -25,7 +43,7 @@ const routes: Routes =[
     CommonModule,
     BrowserModule,
     RouterModule.forRoot(routes,{
-       useHash: true
+       useHash: false
     })
   ],
   exports: [

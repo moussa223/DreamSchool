@@ -7,6 +7,10 @@ import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
 import { AppComponent } from './app.component';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+import { LoginComponent } from './login/login.component';
+import { SidebareComponent } from './sidebare/sidebare.component';
+import { TableauBordComponent } from './tableau-bord/tableau-bord.component';
+
 
 @NgModule({
   imports: [
@@ -21,9 +25,16 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
   declarations: [
     AppComponent,
     AdminLayoutComponent,
+    LoginComponent,
+    SidebareComponent,
+    TableauBordComponent,
+
 
   ],
   providers: [],
+  exports: [
+    SidebareComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
