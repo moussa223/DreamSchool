@@ -1,0 +1,41 @@
+#div-search-filter{
+    height: 80px;
+    background-color: #ECEFEB;
+}
+
+.filter-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: #333; /* Couleur de l'icône */
+    font-size: 0; /* Masque le texte */
+}
+
+#input-search-class{
+    background: none;
+    border: none;
+    outline: none;
+    width: 170px;
+}
+
+#add-class{
+    border: 1px solid;
+    margin: 8px;
+    border-radius: 5px;
+    height: 120px;
+    width: 95%;
+}
+#cours-list{
+    border: 1px solid;
+    margin: 8px;
+    border-radius: 5px;
+    width: 95%;
+}
+#dropdownMenu2{
+    background: none;
+    color: black;
+    border-top-color: #ECEFEB;
+    border-right-color: #ECEFEB;
+    border-left-color: #ECEFEB;
+}

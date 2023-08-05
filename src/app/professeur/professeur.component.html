@@ -1,0 +1,40 @@
+<div class="dashboard">
+    <app-sidebare></app-sidebare>
+    <div class="content">
+        <p id="textDashboard">
+            Professeur
+        </p>
+        <div class="info-container">
+            <div class= "container">
+                <div class="tabbed-content">
+                    <div class="tabs">
+                        <div
+                                class="tab"
+                                *ngFor="let tab of tabs"
+                                [class.active]="tab === activeTab"
+                                (click)="setActiveTab(tab)"
+                        >
+                            {{ tab }}
+                        </div>
+                    </div>
+                    <div class="contentt">
+                        <!-- Contenu de l'onglet 1 -->
+                        <div *ngIf="activeTab === 'Liste'">
+                            <app-onglet-liste-professeur></app-onglet-liste-professeur>
+                        </div>
+
+                        <!-- Contenu de l'onglet 2 -->
+                        <div *ngIf="activeTab === 'Détails'">
+                            Contenu de l'onglet 2
+                        </div>
+
+                        <!-- Contenu de l'onglet 3 -->
+                        <div *ngIf="activeTab === 'Actions'">
+                            Contenu de l'onglet 3
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

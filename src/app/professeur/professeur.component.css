@@ -1,0 +1,68 @@
+
+.dashboard {
+    display: flex;
+    height: auto; /* Ajout de la hauteur pour que le conteneur s'étende sur toute la page */
+}
+
+.content {
+    flex: 1;
+    width: 81%;
+    background-color: purple;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Media query pour écran réduit */
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+    }
+    .content {
+        width: 100%; /* Les éléments prennent toute la largeur de l'écran réduit */
+    }
+
+}
+
+#textDashboard {
+    color: white;
+    padding-left: 30px;
+    padding-top: 20px;
+}
+
+.info-container {
+    background-color: #fff; /* Fond blanc */
+    border-radius: 10px; /* Ajout du border-radius pour les coins arrondis */
+    margin: 25px; /* Ajout d'un espace intérieur pour le contenu de la div */
+    flex: 1;
+    padding: 0 1cm;
+}
+
+
+/*---------------------------------Style des onglets------*/
+
+
+.tabs {
+    display: flex;
+    background-color: #f4f4f4;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-bottom: none;
+}
+
+.tab.active {
+    background-color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.contentt {
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #fff;
+}
+
+
+/*----------------Style du contenu de l onglet 1*/

@@ -10,6 +10,13 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { LoginComponent } from './login/login.component';
 import { SidebareComponent } from './sidebare/sidebare.component';
 import { TableauBordComponent } from './tableau-bord/tableau-bord.component';
+import { ClasseComponent } from './classe/classe.component';
+import { EleveComponent } from './eleve/eleve.component';
+import { ProfesseurComponent } from './professeur/professeur.component';
+import { OngletListeEleveComponent } from './onglet-liste-eleve/onglet-liste-eleve.component';
+import { FamilleComponent } from './famille/famille.component';
+import { CalendrierComponent } from './calendrier/calendrier.component';
+import { OngletListeProfesseurComponent } from './onglet-liste-professeur/onglet-liste-professeur.component';
 
 
 @NgModule({
@@ -28,6 +35,13 @@ import { TableauBordComponent } from './tableau-bord/tableau-bord.component';
     LoginComponent,
     SidebareComponent,
     TableauBordComponent,
+    ClasseComponent,
+    EleveComponent,
+    ProfesseurComponent,
+    OngletListeEleveComponent,
+    FamilleComponent,
+    CalendrierComponent,
+    OngletListeProfesseurComponent,
 
 
   ],

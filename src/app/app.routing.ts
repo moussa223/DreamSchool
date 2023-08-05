@@ -5,10 +5,13 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import {LoginComponent} from "./login/login.component";
-import {DashboardComponent} from "./dashboard/dashboard.component";
-import {SidebarComponent} from "./components/sidebar/sidebar.component";
 import {SidebareComponent} from "./sidebare/sidebare.component";
 import {TableauBordComponent} from "./tableau-bord/tableau-bord.component";
+import{ClasseComponent} from "./classe/classe.component";
+import{EleveComponent} from "./eleve/eleve.component";
+import {ProfesseurComponent} from "./professeur/professeur.component";
+import{FamilleComponent} from "./famille/famille.component";
+import{CalendrierComponent} from "./calendrier/calendrier.component";
 
 const routes: Routes =[
   {
@@ -16,16 +19,8 @@ const routes: Routes =[
     component: LoginComponent,
   },
   {
-    path: 'Dashboard',
-    component: DashboardComponent,
-  },
-  {
     path: 'Admin',
     component: AdminLayoutComponent,
-  },
-  {
-    path: 'Sidebar',
-    component: SidebarComponent,
   },
   {
     path: 'Sidebare',
@@ -35,7 +30,26 @@ const routes: Routes =[
     path: 'Tableau',
     component: TableauBordComponent,
   },
-
+  {
+    path: 'Classe',
+    component: ClasseComponent,
+  },
+  {
+    path: 'Eleve',
+    component: EleveComponent,
+  },
+  {
+    path: 'Professeur',
+    component: ProfesseurComponent,
+  },
+  {
+    path: 'Famille',
+    component: FamilleComponent,
+  },
+  {
+    path: 'Calendrier',
+    component: CalendrierComponent,
+  },
 ];
 
 @NgModule({
