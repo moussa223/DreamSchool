@@ -17,6 +17,10 @@ import { OngletListeEleveComponent } from './onglet-liste-eleve/onglet-liste-ele
 import { FamilleComponent } from './famille/famille.component';
 import { CalendrierComponent } from './calendrier/calendrier.component';
 import { OngletListeProfesseurComponent } from './onglet-liste-professeur/onglet-liste-professeur.component';
+import { InscriptionComponent } from './inscription/inscription.component';
+import { PresenceComponent } from './presence/presence.component';
+import { OngletListeFamilleComponent } from './onglet-liste-famille/onglet-liste-famille.component';
+import { AdmissionComponent } from './admission/admission.component';
 
 
 @NgModule({
@@ -42,6 +46,10 @@ import { OngletListeProfesseurComponent } from './onglet-liste-professeur/onglet
     FamilleComponent,
     CalendrierComponent,
     OngletListeProfesseurComponent,
+    InscriptionComponent,
+    PresenceComponent,
+    OngletListeFamilleComponent,
+    AdmissionComponent,
 
 
   ],

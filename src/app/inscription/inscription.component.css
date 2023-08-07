@@ -1,0 +1,28 @@
+.divider:after,
+.divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+.h-custom {
+    height: calc(100% - 73px);
+}
+@media (max-width: 450px) {
+    .h-custom {
+        height: 100%;
+    }
+}
+.vh-100{
+    /* Première couleur utilisée verte aussi #199A83;    #006550!important;*/
+    background-color: #199A83;
+}
+
+.link-info{
+    font-size: 15px;
+}
+
+body{
+    /* background-color: #199A83; Avoir le fond vert pour toute la page*/
+}
+

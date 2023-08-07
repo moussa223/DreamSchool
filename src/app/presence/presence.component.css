@@ -7,7 +7,7 @@
 .content {
     flex: 1;
     width: 81%;
-    background-color: midnightblue;
+    background-color: #B4CD5E;
     display: flex;
     flex-direction: column;
 }
@@ -36,31 +36,4 @@
     flex: 1;
     padding: 0 1cm;
 }
-/*---------------------------------Style des onglets------*/
 
-
-.tabs {
-    display: flex;
-    background-color: #f4f4f4;
-}
-
-.tab {
-    padding: 10px 20px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-bottom: none;
-}
-
-.tab.active {
-    background-color: #fff;
-    border-bottom: 1px solid #fff;
-}
-
-.contentt {
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #fff;
-}
-
-
-/*----------------Style du contenu de l onglet 1*/

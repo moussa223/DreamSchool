@@ -12,6 +12,9 @@ import{EleveComponent} from "./eleve/eleve.component";
 import {ProfesseurComponent} from "./professeur/professeur.component";
 import{FamilleComponent} from "./famille/famille.component";
 import{CalendrierComponent} from "./calendrier/calendrier.component";
+import {InscriptionComponent} from "./inscription/inscription.component";
+import {PresenceComponent} from "./presence/presence.component";
+import {AdmissionComponent} from "./admission/admission.component";
 
 const routes: Routes =[
   {
@@ -50,6 +53,18 @@ const routes: Routes =[
     path: 'Calendrier',
     component: CalendrierComponent,
   },
+  {
+    path: 'Inscription',
+    component: InscriptionComponent,
+  },
+  {
+    path: 'Presence',
+    component: PresenceComponent,
+  },
+  {
+    path: 'Admission',
+    component: AdmissionComponent,
+  }
 ];
 
 @NgModule({
