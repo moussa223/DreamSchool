@@ -36,4 +36,69 @@
     flex: 1;
     padding: 0 1cm;
 }
+/* --------------------------- Contenu du calendrier ci-dessous --------------------------- */
+/* Styles for the calendar */
+.calendar {
+    margin-top: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    font-weight: bold;
+}
+
+.day {
+    text-align: center;
+}
+
+.dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.date {
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.date:hover {
+    background-color: #f0f0f0;
+}
+
+.date.empty {
+    background-color: #f0f0f0;
+    visibility: hidden;
+}
+
+/* Previous and Next buttons */
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Highlight the current day */
+.current-day {
+    background-color: #007bff;
+    color: white;
+}
+
+/*------------------------- Fin du contenu du calendrier ------------------------------------ */
