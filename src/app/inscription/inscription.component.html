@@ -1,4 +1,4 @@
-<section class="vh-100">
+<section class="vh-130">
     <div class="container-fluid h-custom">
         <div class="row d-flex justify-content-center align-items-center h-100">
             <div class="col-md-9 col-lg-6 col-xl-5">
@@ -16,60 +16,65 @@
                     <div class="divider d-flex align-items-center my-4">
                         <p class="text-center fw-bold mx-3 mb-0"> </p>
                     </div>
-
+                    <app-inscription-success-notification *ngIf="inscriptionReussie"></app-inscription-success-notification>
                     <!-- Name input -->
                     <div class="form-outline mb-3">
-                        <input type="text" class="form-control form-control-sm" placeholder="Nom" aria-label="Username" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="inscriptionService.model.lastName" placeholder="Nom" aria-label="Name" aria-describedby="basic-addon1">
                     </div>
 
                     <!-- Firstname input -->
                     <div class="form-outline mb-3">
-                        <input type="text" class="form-control form-control-sm" placeholder="Prénom" aria-label="Username" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="inscriptionService.model.firstName" placeholder="Prénom" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
 
                     <!-- Gender input -->
                     <div class="form-outline mb-3">
-                        <select id="inputState" class="form-control form-control-sm">
-                            <option selected>Choisir ...</option>
-                            <option>Homme</option>
-                            <option>Femme</option>
+
+                        <select name="gender" id="gender" class="form-control form-control-sm" [(ngModel)]="inscriptionService.model.gender" >
+                            <option value="" disabled selected>Choisissez un genre</option>
+                            <option value="Homme">Homme</option>
+                            <option value="Femme">Femme</option>
                         </select>
                     </div>
 
                     <!-- Birthdate input -->
                     <div class="form-outline mb-3">
-                        <input type="date" class="form-control form-control-sm" placeholder="Date de naissance" aria-label="Username" aria-describedby="basic-addon1">
+                        <input type="date" class="form-control form-control-sm" [(ngModel)]="inscriptionService.model.birthDate" placeholder="Date de naissance" aria-label="Username" aria-describedby="basic-addon1">
+                    </div>
+
+                    <!-- Username input -->
+                    <div class="form-outline mb-3">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="inscriptionService.model.userName" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
 
                     <!-- Email input -->
                     <div class="form-outline mb-3">
-                        <input type="text" class="form-control form-control-sm" placeholder="Username ou email" aria-label="Username" aria-describedby="basic-addon1">
+                        <input type="email" class="form-control form-control-sm" [(ngModel)]="inscriptionService.model.email" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
 
                     <!-- Adress input -->
                     <div class="form-outline mb-3">
-                        <input type="text" class="form-control form-control-sm" placeholder="Adresse" aria-label="Username" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="inscriptionService.model.address" placeholder="Adresse" aria-label="Adresse" aria-describedby="basic-addon1">
                     </div>
 
                     <!-- Téléphone input -->
                     <div class="form-outline mb-3">
-                        <input type="number" class="form-control form-control-sm" placeholder="Téléphone" aria-label="Username" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control form-control-sm" [(ngModel)]="inscriptionService.model.phoneNumber" placeholder="Téléphone" aria-label="Téléphone" aria-describedby="basic-addon1">
                     </div>
 
                     <!-- Password input -->
                     <div class="form-outline mb-3">
-                        <input type="password" id="form3Example4" class="form-control form-control-sm"
+                        <input type="password" id="form3Example4" class="form-control form-control-sm" [(ngModel)]="inscriptionService.model.password"
                                placeholder="Veuillez saisir votre mot de passe" />
                     </div>
-
                     <!-- Confirm Password input -->
                     <div class="form-outline mb-3">
-                        <input type="password" id="ConfirmPassword" class="form-control form-control-sm"
-                               placeholder="Confirmez votre mot de passe" />
+                        <input type="password" class="form-control form-control-sm" [(ngModel)]="inscriptionService.confirmPassword"
+                               placeholder="Confirmez votre mot de passe" name="confirmPassword" />
                     </div>
 
                     <div class="text-center text-lg-start mt-0 pt-0">
-                        <button type="button" class="btn btn-primary btn" routerLink=""
+                        <button type="button" class="btn btn-primary btn" (click)="register()"
                                 style="padding-left: 2.5rem; padding-right: 2.5rem;">S'inscrire</button>
                         <p class="small fw-bold mt-0 pt-0 mb-0">Vous avez déjà un compte ? <a href="" class="link-info">Connexion</a></p>
                     </div>

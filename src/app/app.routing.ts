@@ -15,6 +15,7 @@ import{CalendrierComponent} from "./calendrier/calendrier.component";
 import {InscriptionComponent} from "./inscription/inscription.component";
 import {PresenceComponent} from "./presence/presence.component";
 import {AdmissionComponent} from "./admission/admission.component";
+import {AuthGuard} from "./auth.guard";
 
 const routes: Routes =[
   {
@@ -28,30 +29,36 @@ const routes: Routes =[
   {
     path: 'Sidebare',
     component: SidebareComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'Tableau',
-    component: TableauBordComponent,
+    component: TableauBordComponent
   },
   {
     path: 'Classe',
     component: ClasseComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'Eleve',
     component: EleveComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'Professeur',
     component: ProfesseurComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'Famille',
     component: FamilleComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'Calendrier',
     component: CalendrierComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'Inscription',
@@ -60,10 +67,12 @@ const routes: Routes =[
   {
     path: 'Presence',
     component: PresenceComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'Admission',
     component: AdmissionComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

@@ -21,6 +21,7 @@ import { InscriptionComponent } from './inscription/inscription.component';
 import { PresenceComponent } from './presence/presence.component';
 import { OngletListeFamilleComponent } from './onglet-liste-famille/onglet-liste-famille.component';
 import { AdmissionComponent } from './admission/admission.component';
+import { InscriptionSuccessNotificationComponent } from './inscription-success-notification/inscription-success-notification.component';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { AdmissionComponent } from './admission/admission.component';
     PresenceComponent,
     OngletListeFamilleComponent,
     AdmissionComponent,
+    InscriptionSuccessNotificationComponent,
 
 
   ],
