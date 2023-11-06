@@ -33,7 +33,8 @@ const routes: Routes =[
   },
   {
     path: 'Tableau',
-    component: TableauBordComponent
+    component: TableauBordComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'Classe',
