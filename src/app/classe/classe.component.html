@@ -25,9 +25,9 @@
                     </div>
                     <div class="col">
                          <span id="nbr-classes">
-                             {{classRoomData.length}} Classes
+                             {{classRoomData.length}} classes
                         </span>
-                        <div class="vr"></div>
+                        <div class="vr"></div> <!-- A changer car j'ai l'impression que Div class vr n'est plus à jour  -->
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                         </svg>
@@ -44,25 +44,28 @@
                         <!-- Debut champs de formulaire ici -->
                         <div class="row">
                             <div class="col-sm-6">
-                                <input type="text" class="form-control mb-1 btn-sm" id="ClassRoomName" placeholder="Nom de la classe">
+                                <input type="text" [(ngModel)]="classeService.classRoomModel.classRoomDto.name" class="form-control mb-1 btn-sm" id="ClassRoomName" placeholder="Nom de la classe">
                             </div>
                             <div class="col-sm-6">
-                                <input type="date" class="form-control mb-1 btn-sm" id="ClassRoomStartdate" placeholder="Date de démarrage de la classe">
+                                <input type="date" [(ngModel)]="classeService.classRoomModel.classRoomDto.startDate" class="form-control mb-1 btn-sm" id="ClassRoomStartdate" placeholder="Date de démarrage de la classe">
                             </div>
                             <div class="col-sm-6">
-                                <input type="date" label="Endate" class="form-control mb-1 btn-sm" id="ClassRoomEnddate" placeholder="Date de fermeture de la classe">
+                                <input type="date" [(ngModel)]="classeService.classRoomModel.classRoomDto.endDate" label="Endate" class="form-control mb-1 btn-sm" id="ClassRoomEnddate" placeholder="Date de fermeture de la classe">
                             </div>
                             <div class="col-sm-6">
-                                <input type="number" class="form-control mb-1 btn-sm" id="Capacity" placeholder="Capacité de la classe">
+                                <input type="number" [(ngModel)]="classeService.classRoomModel.classRoomDto.capacity" class="form-control mb-1 btn-sm" id="Capacity" placeholder="Capacité de la classe">
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control mb-1 btn-sm" id="Level" placeholder="Niveau de la classe">
+                                <input type="text" [(ngModel)]="classeService.classRoomModel.classRoomDto.levels" class="form-control mb-1 btn-sm" id="Level" placeholder="Niveau de la classe">
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control mb-1 btn-sm" id="infos" placeholder="Infos de la classe">
+                                <input type="text" [(ngModel)]="classeService.classRoomModel.classRoomDto.infos" class="form-control mb-1 btn-sm" id="infos" placeholder="Infos de la classe">
                             </div>
                             <div class="col-sm-6">
-                                <input type="text" class="form-control mb-1 btn-sm" id="AddCourse" placeholder="Ajout de cours à implementer">
+                                <select id="selectedCourses" [(ngModel)]="classeService.classRoomModel.classRoomDto.courseIds" class="form-control form-control-sm" name="selectedCourses"  multiple>
+                                    <option value="" disabled selected>Choisissez les cours de la classe</option>
+                                    <option *ngFor="let course of this.courseData" [ngValue]="course.id"> {{course.name}} </option>
+                                </select>
                             </div>
                         </div>
                         <!-- Fin champs de formulaire -->
@@ -79,7 +82,7 @@
                             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
                         </svg>
                     </div>
-                    <div class="col-sm-3" id="cours-list" *ngFor="let classe of this.classRoomData">
+                    <div class="col-sm-3" id="cours-list" *ngFor="let classe of this.classRoomData" (click)="selectClass(classe)">
                         <div class="row">
                             <div class="col-10">
                                 {{classe.name}}
@@ -91,7 +94,7 @@
                                 </span>
                                 <br>
                                 <span>
-                                    6 Cours
+                                    {{classe.courses.length}} Cours
                                 </span>
                                 <br>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
@@ -113,10 +116,144 @@
                         </div>
                     </div>
                     <div class="col-sm-3">
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+
+<!-- ----------------------------------- Zone Pop Up class Details -------------------------      -->
+<!-- Pop up pour voir les détails d'une classe -->
+<div class="background-overlay" *ngIf="isClassPopUpOpen" (close)="CloseClassDetailsPopUp()"></div>
+<div class="popup-container" *ngIf="isClassPopUpOpen" (close)="CloseClassDetailsPopUp()">
+    <div *ngIf="selectedClass">
+        <h2>Détails
+            <button type="button" class="btn btn-md btn-danger mt-1" *ngIf="isClassPopUpOpen" (click)="CloseClassDetailsPopUp()"> Fermer
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </button>
+        </h2>
+        <b>Nom : </b>{{ selectedClass.name }}
+        <br>
+        <b>Commence le : </b>{{ selectedClass.startDate }}
+        <br>
+        <b>Termine le : </b>{{ selectedClass.endDate }}
+        <br>
+        <b>Nombre de place : </b>{{ selectedClass.capacity }}
+        <br>
+        <b>Niveau : </b>{{ selectedClass.levels }}
+        <br>
+        <b>Infos de la classe : </b>{{ selectedClass.infos }}
+        <br>
+        <b>Cours de la classe:</b>
+        <div *ngFor="let classRoomCourse of selectedClass.courses">
+            <div class="row">
+                <div class="col-4-sm">
+                    <em>{{classRoomCourse.name}}</em>
+                </div>
+                <div class="col-6-sm">
+                    <button type="submit" class="btn btn-sm btn-info mr-2 mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                            <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                            <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                        </svg>
+                    </button>
+                    <button type="submit" class="btn btn-sm btn-danger mr-2 mt-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+        <!--  NB: Pour connaître l'id de la classe il faut utiliser {{ ClassRoomCourse.id }} -->
+    </div>
+    <button type="submit" class="btn btn-sm btn-success mr-2 mt-1" (click)="openAddCoursesToClassPopup()">Ajouter un cours
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+        </svg>
+    </button>
+    <button type="submit" class="btn btn-sm btn-warning mr-2 mt-1" (click)="openUpdateClassPopup()">Modifier la classe
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+        </svg>
+    </button>
+    <button type="submit" class="btn btn-sm btn-danger mr-2 mt-1">Supprimer la classe
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-octagon" viewBox="0 0 16 16">
+            <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z"/>
+            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+        </svg>
+    </button>
+</div>
+<!--  ----------------------------------- Zone Pop Up class Details -------------------------  -->
+
+
+<!--  ----------------------------------- Pop Up Update ClassRoom -------------------------  -->
+
+<!-- <input type="text" [value]="selectedClass.infos"> pour la modification d'une classe donc le formulaire cotiendra
+ les infos de la classe par défaut et ça sera à l'utilisateur de le modifier ou pas -->
+
+<div class="background-overlay" *ngIf="isUpdateClassPopUpOpen" (close)="closeUpdateClassPopup()"></div>
+<div class="popup-container" *ngIf="isUpdateClassPopUpOpen" (close)="closeUpdateClassPopup()">
+    <div class="row">
+        <h2>Modifier la classe</h2>
+    </div>
+    <form>
+        <!-- Debut champs de formulaire ici -->
+        <div class="row">
+            <div class="col-sm-6">
+                <input type="text" [(ngModel)]="updatedClassRoomDto.name" class="form-control mb-1 btn-sm" id="UpdateClassRoomName" placeholder="{{selectedClass.name}}" >
+            </div>
+            <div class="col-sm-6">
+                <input type="date" [(ngModel)]="updatedClassRoomDto.startDate" class="form-control mb-1 btn-sm" id="UpdateClassRoomStartdate" placeholder="Date de démarrage de la classe">
+            </div>
+            <div class="col-sm-6">
+                <input type="date" [(ngModel)]="updatedClassRoomDto.endDate" label="Endate" class="form-control mb-1 btn-sm" id="UpdateClassRoomEnddate" placeholder="Date de fermeture de la classe">
+            </div>
+            <div class="col-sm-6">
+                <input type="number" [(ngModel)]="updatedClassRoomDto.capacity" class="form-control mb-1 btn-sm" id="UpdateCapacity" placeholder="{{selectedClass.capacity}}">
+            </div>
+            <div class="col-sm-6">
+                <input type="text" [(ngModel)]="updatedClassRoomDto.levels" class="form-control mb-1 btn-sm" id="UpdateLevel" placeholder="{{selectedClass.levels}}">
+            </div>
+            <div class="col-sm-6">
+                <input type="text" [(ngModel)]="updatedClassRoomDto.infos" class="form-control mb-1 btn-sm" id="Updateinfos" placeholder="{{selectedClass.infos}}">
+            </div>
+        </div>
+        <!-- Fin champs de formulaire -->
+        <button type="submit" class="btn btn-sm btn-warning mr-2 mt-1" (click)="UpdateClassRoom()">Modifier</button>
+        <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isUpdateClassPopUpOpen" (click)="closeUpdateClassPopup()">Annuler</button>
+    </form>
+</div>
+<!--  ----------------------------------- End Pop Up Update class  -------------------------  -->
+
+
+<!-- Pop up pour ajouter un cours à une classe -->
+<div class="background-overlay" *ngIf="isAddCoursesToClassPopUpOpen" (close)="closeAddCoursesToClassPopup()"></div>
+<div class="popup-container" *ngIf="isAddCoursesToClassPopUpOpen" (close)="closeAddCoursesToClassPopup()">
+    <div class="row">
+        <h2>Ajouter des cours à {{selectedClass.name}} </h2>
+    </div>
+    <form>
+        <!-- Debut champs de formulaire ici -->
+        <div class="row">
+            <div class="col-sm-6">
+                <select id="selectedCoursesToAddToClassRoom" [(ngModel)]="classeService.AddCourseToClassRoomModel.courseIds" class="form-control form-control-sm" name="selectedCourses"  multiple>
+                    <option value="" disabled selected>Liste des cours</option>
+                    <option *ngFor="let course of this.courseData" [ngValue]="course.id"> {{course.name}} </option>
+                </select>
+            </div>
+        </div>
+        <!-- Fin champs de formulaire -->
+        <button type="submit" class="btn btn-sm btn-success mr-2 mt-1" (click)="AddCoursesToClassRoom()">Ajouter</button>
+        <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isAddCoursesToClassPopUpOpen" (click)="closeAddCoursesToClassPopup()">Annuler</button>
+    </form>
+</div>
+<!-- Pop up pour ajouter un cours à une classe -->

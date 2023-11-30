@@ -24,6 +24,8 @@ import { AdmissionComponent } from './admission/admission.component';
 import { InscriptionSuccessNotificationComponent } from './inscription-success-notification/inscription-success-notification.component';
 import { CreateClassComponent } from './create-class/create-class.component';
 import { CreateEleveComponent } from './create-eleve/create-eleve.component';
+import { CoursComponent } from './cours/cours.component';
+import { ClasseDetailsComponent } from './classe-details/classe-details.component';
 
 
 @NgModule({
@@ -56,6 +58,8 @@ import { CreateEleveComponent } from './create-eleve/create-eleve.component';
     InscriptionSuccessNotificationComponent,
     CreateClassComponent,
     CreateEleveComponent,
+    CoursComponent,
+    ClasseDetailsComponent,
 
 
   ],

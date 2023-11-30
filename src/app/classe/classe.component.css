@@ -64,7 +64,7 @@
     border: 1px solid;
     margin: 8px;
     border-radius: 5px;
-    height: 120px;
+    height: 140px;
     width: 95%;
 }
 #cours-list{
@@ -73,7 +73,7 @@
     border-radius: 5px;
     width: 95%;
 }
-/* popup.component.css */
+/*------------------------------------- popup.component.css ------------------------------------------*/
 .popup-container {
     position: fixed;
     top: 50%;
@@ -94,4 +94,4 @@
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
 }
-/* ---------------------------------- */
+/* --------------------------------------------------------------------------------------------------- */
