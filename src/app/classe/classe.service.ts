@@ -23,11 +23,14 @@ export class ClasseService {
   AddCourseToClassRoomModel: any = {
     courseIds: [ 0 ]
   };
-
-  private GetAllClassRoomUrl = 'https://localhost:7012/api/ClassRoom/GetAllClassRooms'; //  l'URL de l' API
+  DeleteCourseToClassRoomModel: any = {
+    CourseId: 0
+  }
+  private GetAllClassRoomUrl = 'https://localhost:7012/api/ClassRoom/GetAllClassRooms'; //  l'URL de l'endpoint
   private AddClassRoomUrl = 'https://localhost:7012/api/ClassRoom/Create';
   private UpdateClassRoomUrl = 'https://localhost:7012/api/ClassRoom/Update';
   private AddCourseToClassRoomUrl = 'https://localhost:7012/api/ClassRoom/AddCoursesToClassRoom';
+  private DeleteCourseFromClassRoomUrl = 'https://localhost:7012/api/ClassRoom/RemoveCoursesToClassRoom';
 
   constructor(private http: HttpClient) { }
 
@@ -74,5 +77,15 @@ export class ClasseService {
     return this.http.post(urlWithParam,courseIds, {headers});
   }
   // ---------------- Delete ClassRoom ------------------------------------
-
+  DeleteCourseFromClassRoom(classRoomId: number, CourseId: any): Observable<any>{
+    // Récupérer le token depuis le local storage
+    const token = localStorage.getItem('usingsecretkeyforapp');
+    // Ajout du token dans le header de la réquête
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    // Appel de la méthode Http put UpdateClassRoom de l'API
+    return this.http.delete(`${this.DeleteCourseFromClassRoomUrl}/${classRoomId}?CourseId=${CourseId}`, {headers});
+  }
+  //
 }

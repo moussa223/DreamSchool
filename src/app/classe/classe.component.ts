@@ -18,6 +18,7 @@ export class ClasseComponent implements OnInit {
   isClassPopUpOpen = false;
   isAddCoursesToClassPopUpOpen = false; // Pop d'ajout d'un cours à une classe
   selectedClass: any | null = null;  // La classe selectionné parmi la liste des classes
+  selectedClassCourses: any | null = null; // le cours selectionné de la classe qui va permettre par exemple de supprimer un cours parmi les cours de la classe
   updatedClassRoomDto: any = { // modèle pour la modification d'une classe mais à voir si je peux directement utiliser classRoomModel.ClassRoomDto dans classe.service
           id: 0,
           name: '',
@@ -30,6 +31,7 @@ export class ClasseComponent implements OnInit {
               0 // Ex: si je remplace 0 par 1 , le premier cours de la liste sera selectionné par défaut
           ]
   };
+
   constructor(public classeService:ClasseService, private coursService: CoursService, private router:Router) { }
 
   ngOnInit(): void {
@@ -71,7 +73,15 @@ export class ClasseComponent implements OnInit {
         this.selectedClass = classRoom;
         this.openClassDetailsPopUp();
     }
-    //
+    // Suppression d'un cours d'une classe parmi les autres cours
+    DeleteClassCourses(classCourses: any): void{
+      this.selectedClassCourses = classCourses;
+        alert("Le cours "+this.selectedClassCourses.name + " sera supprimé de cette classe");
+        this.DeleteCoursesToClassRoom(); // On fait appel à la méthode de suppression
+        // Je recharge la page
+        window.location.reload();
+    }
+    // Création d'une classe
     onSubmit() {
       this.CreateClassRoom();
         // Logique pour traiter les données du formulaire ici
@@ -138,6 +148,25 @@ export class ClasseComponent implements OnInit {
                 this.closeAddCoursesToClassPopup();
                 // Rechargez la page après une réponse réussie
                 window.location.reload();
+            },
+            (error) => {
+                // Gérez les erreurs ici
+                // console.error(error.error.message);
+                console.error(error);
+            }
+        );
+    }
+    // Delete Course From ClassRoom, NB: Cette methode est appelée un peu plus haut, pas duppliquée
+    DeleteCoursesToClassRoom(){
+        this.classeService.DeleteCourseFromClassRoom(this.selectedClass.id,this.selectedClassCourses.id).subscribe(
+            (response) => {
+                // Gérez la réponse de l'API ici
+                console.log(response);
+                // fermeture du popup Après le traitement
+                this.closePopup();
+                // Rechargez la page après une réponse réussie
+                // window.location.reload(); // Je l'ai mis en commentaire car avec delete la requête rentre dans le
+                // case Error je ne sais pas pourquoi mais je vais recharger la page en haut dans DeleteClass
             },
             (error) => {
                 // Gérez les erreurs ici

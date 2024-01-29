@@ -61,13 +61,15 @@
 }
 
 #add-class{
+    cursor: pointer; /* Cette propriété permet d'avoir un curseur  icône de main à la place de la souris  */
     border: 1px solid;
     margin: 8px;
     border-radius: 5px;
-    height: 140px;
+    /* height: 140px; "Je l'ai mis en commentaire, à voir si ça a un impact ou non !" */
     width: 95%;
 }
 #cours-list{
+    cursor: pointer; /* Cette propriété permet d'avoir un curseur  icône de main à la place de la souris  */
     border: 1px solid;
     margin: 8px;
     border-radius: 5px;
