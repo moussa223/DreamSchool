@@ -1,0 +1,31 @@
+/* ----------------------------- */
+/* popup.component.css */
+.popup-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+
+.background-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+/* ---------------------------------- */
+
+.card{
+  font-size: 12px;
+}
+.table-editable{
+  max-height: 200px; /* Ajustez cette valeur selon vos besoins */
+  overflow-y: auto;
+}

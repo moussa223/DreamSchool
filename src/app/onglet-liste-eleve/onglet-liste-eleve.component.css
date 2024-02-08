@@ -20,6 +20,7 @@
 }
 
 #add-class{
+    cursor: pointer; /* Cette propriété permet d'avoir un curseur  icône de main à la place de la souris  */
     border: 1px solid;
     margin: 8px;
     border-radius: 5px;
@@ -27,6 +28,7 @@
     width: 95%;
 }
 #cours-list{
+    cursor: pointer; /* Cette propriété permet d'avoir un curseur  icône de main à la place de la souris  */
     border: 1px solid;
     margin: 8px;
     border-radius: 5px;

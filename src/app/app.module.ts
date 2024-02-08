@@ -26,6 +26,8 @@ import { CreateClassComponent } from './create-class/create-class.component';
 import { CreateEleveComponent } from './create-eleve/create-eleve.component';
 import { CoursComponent } from './cours/cours.component';
 import { ClasseDetailsComponent } from './classe-details/classe-details.component';
+import { OngletBulletinComponent } from './onglet-bulletin/onglet-bulletin.component';
+import { OngletNotesComponent } from './onglet-notes/onglet-notes.component';
 
 
 @NgModule({
@@ -60,6 +62,8 @@ import { ClasseDetailsComponent } from './classe-details/classe-details.componen
     CreateEleveComponent,
     CoursComponent,
     ClasseDetailsComponent,
+    OngletBulletinComponent,
+    OngletNotesComponent,
 
 
   ],

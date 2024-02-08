@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./eleve.component.css']
 })
 export class EleveComponent implements OnInit {
-  tabs = ['Liste', 'Détails', 'Actions'];
+  tabs = ['Liste des élèves', 'Bulletins des élèves','Fiche des notes', 'Actions'];
   activeTab = this.tabs[0]; // Onglet actif par défaut
   constructor() { }
   // Fonction pour changer l'onglet actif

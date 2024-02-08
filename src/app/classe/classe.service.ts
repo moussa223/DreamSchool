@@ -29,6 +29,7 @@ export class ClasseService {
   private GetAllClassRoomUrl = 'https://localhost:7012/api/ClassRoom/GetAllClassRooms'; //  l'URL de l'endpoint
   private AddClassRoomUrl = 'https://localhost:7012/api/ClassRoom/Create';
   private UpdateClassRoomUrl = 'https://localhost:7012/api/ClassRoom/Update';
+  private DeleteClassRoomUrl = 'https://localhost:7012/api/ClassRoom/Delete';
   private AddCourseToClassRoomUrl = 'https://localhost:7012/api/ClassRoom/AddCoursesToClassRoom';
   private DeleteCourseFromClassRoomUrl = 'https://localhost:7012/api/ClassRoom/RemoveCoursesToClassRoom';
 
@@ -63,6 +64,17 @@ export class ClasseService {
     });
     // Appel de la méthode Http put UpdateClassRoom de l'API
     return this.http.put(`${this.UpdateClassRoomUrl}/${classRoomId}`, updatedClassRoomDto, {headers});
+  }
+  // ---------------- Delete ClassRoom ------------------------------------
+  DeleteClassRoom(classRoomId: number): Observable<any>{
+    // Récupérer le token depuis le local storage
+    const token = localStorage.getItem('usingsecretkeyforapp');
+    // Ajout du token dans le header de la réquête
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    // Appel de la méthode Http put UpdateClassRoom de l'API
+    return this.http.delete(`${this.DeleteClassRoomUrl}/${classRoomId}`, {headers});
   }
   // ----------------- Add Courses To ClassRoom ---------------------------
   AddToCoursesToClassRoom(classRoomId: number, courseIds: any): Observable<any>{

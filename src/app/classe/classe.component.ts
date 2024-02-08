@@ -73,6 +73,14 @@ export class ClasseComponent implements OnInit {
         this.selectedClass = classRoom;
         this.openClassDetailsPopUp();
     }
+    // ----------------------- Selected ClassRoom To Delete --------------------------------
+    selectClassRoomToDelete(classRoom:any): void{
+        this.selectedClass = classRoom;
+        alert("La classe "+this.selectedClass.name + " sera supprimé");
+        this.DeleteClassRoom();
+        // Je recharge la page
+        window.location.reload();
+    }
     // Suppression d'un cours d'une classe parmi les autres cours
     DeleteClassCourses(classCourses: any): void{
       this.selectedClassCourses = classCourses;
@@ -148,6 +156,25 @@ export class ClasseComponent implements OnInit {
                 this.closeAddCoursesToClassPopup();
                 // Rechargez la page après une réponse réussie
                 window.location.reload();
+            },
+            (error) => {
+                // Gérez les erreurs ici
+                // console.error(error.error.message);
+                console.error(error);
+            }
+        );
+    }
+    // Delete ClassRoom, NB: Cette methode est appelée un peu plus haut, pas duppliquée
+    DeleteClassRoom(){
+        this.classeService.DeleteClassRoom(this.selectedClass.id).subscribe(
+            (response) => {
+                // Gérez la réponse de l'API ici
+                console.log(response);
+                // fermeture du popup Après le traitement
+                this.closePopup();
+                // Rechargez la page après une réponse réussie
+                // window.location.reload(); // Je l'ai mis en commentaire car avec delete la requête rentre dans le
+                // case Error je ne sais pas pourquoi mais je vais recharger la page en haut dans DeleteClass
             },
             (error) => {
                 // Gérez les erreurs ici
