@@ -38,15 +38,15 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <th scope="row">1</th>
-        <td>Bulletin Janvier</td>
-        <td>Etienne</td>
+    <tr *ngFor="let bulletin of bulletinData; let index = index">
+        <th scope="row">{{index + 1}}</th>
+        <td>{{bulletin.titre}}</td>
+        <td>{{bulletin.students[0].lastName}} {{bulletin.students[0].firstName}} </td>
         <td>5 ème année</td>
-        <td>3/24</td>
-        <td>12/01/2024</td>
+        <td>{{bulletin.rang}}</td>
+        <td>{{bulletin.date}}</td>
         <td>
-            <button type="button" class="btn btn-sm btn-outline-primary mr-2" >
+            <button type="button" class="btn btn-sm btn-outline-primary mr-2" (click)="selectBulletin(bulletin)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
                     <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
                     <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
@@ -83,21 +83,19 @@
         <!-- champs de formulaire ici -->
         <div class="row">
             <div class="col-sm-6 mb-1">
-                <input type="text" class="form-control mb-1 btn-sm" id="StudentLastName" placeholder="Titre du bulletin">
+                <input type="text" class="form-control mb-1 btn-sm" [(ngModel)]="bulletinService.bulletinModel.bulletinDto.titre" id="StudentLastName" placeholder="Titre du bulletin">
             </div>
             <div class="col-sm-6 mb-1">
-                <input type="Date" class="form-control mb-1 btn-sm" id="BulletinDate" placeholder="Date">
+                <input type="Date" class="form-control mb-1 btn-sm" id="BulletinDate" [(ngModel)]="bulletinService.bulletinModel.bulletinDto.date" placeholder="Date">
             </div>
             <div class="col-sm-6 mb-1">
-                <select class="form-select" aria-label="Default select example">
+                <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedStudent" (change)="selectStudent(selectedStudent)">
                     <option selected>Selectionnez l'élève concerné</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option *ngFor="let student of this.studentsData" [ngValue]="student">{{student.lastName}}  {{student.firstName}}</option>
                 </select>
             </div>
             <div class="col-sm-6 mb-1">
-                <input type="text" class="form-control mb-1 btn-sm" id="Remarque" placeholder="Remarques">
+                <input type="text" class="form-control mb-1 btn-sm" id="Remarque" [(ngModel)]="bulletinService.bulletinModel.bulletinDto.remarque" placeholder="Remarques">
             </div>
         </div>
         <!-- Editable table -->
@@ -113,74 +111,34 @@
                         <tr>
                             <th class="text-center">Matière</th>
                             <th class="text-center">Notes</th>
-                            <th class="text-center">Appréciation</th>
                             <th class="text-center">Coefficient</th>
                             <th class="text-center">Autres</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td class="pt-3-half" contenteditable="true">Aurelia Vega</td>
-                            <td class="pt-3-half" contenteditable="true">30</td>
-                            <td class="pt-3-half" contenteditable="true">Deepends</td>
-                            <td class="pt-3-half" contenteditable="true">Spain</td>
-                            <td class="pt-3-half" contenteditable="true">Madrid</td>
+                        <tbody *ngIf="selectedStudent">
+                        <tr *ngFor="let studentClassRoomCourse of classRoomsData.courses">
+                            <td class="pt-3-half" contenteditable="false">{{studentClassRoomCourse.name}}</td>
+                            <td class="pt-3-half" contenteditable="true">
+                                <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedNoteIds[studentClassRoomCourse.id]">
+                                    <option selected>Selectionnez la note obtenue par l'élève</option>
+                                    <option *ngFor="let studentNote of this.studentNotesData" [ngValue]="studentNote.id" > {{studentNote.noteObtenue}}/{{studentNote.total}} - {{studentNote.courses[0].name}}  obtenue le {{studentNote.date}}</option>
+                                </select>
+                            </td>
+                            <td class="pt-3-half" contenteditable="false">{{studentClassRoomCourse.credits}}</td>
+                            <td class="pt-3-half" contenteditable="false">RAS</td>
                         </tr>
                         <!-- This is our clonable table line -->
-                        <tr>
-                            <td class="pt-3-half" contenteditable="true">Aurelia Vega</td>
-                            <td class="pt-3-half" contenteditable="true">30</td>
-                            <td class="pt-3-half" contenteditable="true">Deepends</td>
-                            <td class="pt-3-half" contenteditable="true">Spain</td>
-                            <td class="pt-3-half" contenteditable="true">Madrid</td>
-                        </tr>
-                        <!-- This is our clonable table line -->
-                        <tr>
-                            <td class="pt-3-half" contenteditable="true">Aurelia Vega</td>
-                            <td class="pt-3-half" contenteditable="true">30</td>
-                            <td class="pt-3-half" contenteditable="true">Deepends</td>
-                            <td class="pt-3-half" contenteditable="true">Spain</td>
-                            <td class="pt-3-half" contenteditable="true">Madrid</td>
-                        </tr>
-                        <!-- This is our clonable table line -->
-                        <tr>
-                            <td class="pt-3-half" contenteditable="true">Aurelia Vega</td>
-                            <td class="pt-3-half" contenteditable="true">30</td>
-                            <td class="pt-3-half" contenteditable="true">Deepends</td>
-                            <td class="pt-3-half" contenteditable="true">Spain</td>
-                            <td class="pt-3-half" contenteditable="true">Madrid</td>
-                        </tr>
-                        <!-- This is our clonable table line -->
-                        <tr>
-                            <td class="pt-3-half" contenteditable="true">Guerra</td>
-                            <td class="pt-3-half" contenteditable="true">45</td>
-                            <td class="pt-3-half" contenteditable="true">Insectus</td>
-                            <td class="pt-3-half" contenteditable="true">USA</td>
-                            <td class="pt-3-half" contenteditable="true">San</td>
-                        </tr>
-                        <!-- This is our clonable table line -->
-                        <tr>
-                            <td class="pt-3-half" contenteditable="true">Guadalupe</td>
-                            <td class="pt-3-half" contenteditable="true">26</td>
-                            <td class="pt-3-half" contenteditable="true">Isotronic</td>
-                            <td class="pt-3-half" contenteditable="true">Germany</td>
-                            <td class="pt-3-half" contenteditable="true">Frankfurt </td>
-                        </tr>
-                        <!-- This is our clonable table line -->
-                        <tr class="hide">
-                            <td class="pt-3-half" contenteditable="true">Elisa</td>
-                            <td class="pt-3-half" contenteditable="true">31</td>
-                            <td class="pt-3-half" contenteditable="true">Portica</td>
-                            <td class="pt-3-half" contenteditable="true">United</td>
-                            <td class="pt-3-half" contenteditable="true">London</td>
-                        </tr>
                         <tr>
                             <th class="text-center">Moyenne</th>
-                            <td class="pt-3-half" contenteditable="true">17,16/20</td>
+                            <td class="pt-3-half" contenteditable="true">
+                                <input type="text" class="form-control mb-1 btn-sm" id="StudentMoyenne" [(ngModel)]="bulletinService.bulletinModel.bulletinDto.moyenne" placeholder="Moyenne de l'élève">
+                            </td>
                         </tr>
                         <tr>
                             <th class="text-center">Rang</th>
-                            <td class="pt-3-half" contenteditable="true">3/43</td>
+                            <td class="pt-3-half" contenteditable="true">
+                                <input type="text" class="form-control mb-1 btn-sm" id="StudentRang" [(ngModel)]="bulletinService.bulletinModel.bulletinDto.rang" placeholder="Classement de l'élève">
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -190,9 +148,80 @@
         <!-- Editable table -->
 
         <!-- champs de formulaire ici -->
-        <button type="submit" class="btn btn-sm btn-success mr-2 mt-1" >Ajouter</button>
+        <button type="submit" class="btn btn-sm btn-success mr-2 mt-1" (click)="onSubmit()">Ajouter</button>
         <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isAddBulletinPopupOpen" (click)="closePopup()">Annuler</button>
     </form>
 </div>
-<!------------------------------------------------------ Pop up pour ajouter un bulletin ----------------------------------->
+<!------------------------------------------------------ Fin Pop up pour ajouter un bulletin ----------------------------------->
 
+<!------------------------------------------------------  Début Pop up pour Voir un bulletin ----------------------------------->
+<div class="background-overlay" *ngIf="isGetBulletinPopupOpen" (close)="closeGetPopup()"></div>
+<div class="popup-container" *ngIf="isGetBulletinPopupOpen" (close)="closeGetPopup()">
+    <div class="row">
+        <h3 style="color: deepskyblue">{{selectedBulletin.students[0].lastName}} {{selectedBulletin.students[0].firstName}} - {{selectedBulletin.titre}}</h3>
+    </div>
+    <form>
+        <!-- champs de formulaire ici -->
+        <div class="row">
+            <div class="col-sm-6 mb-1">
+                <h1 class="mb-1 btn-sm">{{selectedBulletin.titre}}</h1>
+            </div>
+            <div class="col-sm-6 mb-1">
+                <p class="mb-1 btn-sm">{{selectedBulletin.date}}</p>
+            </div>
+            <div class="col-sm-6 mb-1">
+                <p class="mb-1 btn-sm">{{selectedBulletin.students[0].lastName}} {{selectedBulletin.students[0].firstName}}</p>
+            </div>
+            <div class="col-sm-6 mb-1">
+                <p class="mb-1 btn-sm">Appréciation: {{selectedBulletin.remarque}}</p>
+            </div>
+        </div>
+        <!-- Editable table -->
+        <div class="card">
+            <h4 class="card-header text-center font-weight-bold text-uppercase py-2">
+                Bulletin de notes
+            </h4>
+            <div class="card-body">
+                <div id="GetBulletintable" class="table-editable">
+                    <table class="table table-bordered table-responsive-md table-striped text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Matière</th>
+                            <th class="text-center">Notes</th>
+                            <th class="text-center">Coefficient</th>
+                            <th class="text-center">Autres</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let note of selectedBulletin.notes">
+                            <td class="pt-3-half" contenteditable="false">{{getCourseName(note.courseIds[0])}}</td>
+                            <td class="pt-3-half" contenteditable="true">
+                                {{note.noteObtenue}}
+                            </td>
+                            <td class="pt-3-half" contenteditable="false">Test</td>
+                            <td class="pt-3-half" contenteditable="false">RAS</td>
+                        </tr>
+                        <!-- This is our clonable table line -->
+                        <tr>
+                            <th class="text-center">Moyenne</th>
+                            <td class="pt-3-half" contenteditable="false">
+                                <p class="form-control mb-1 btn-sm">{{selectedBulletin.moyenne}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Rang</th>
+                            <td class="pt-3-half" contenteditable="false">
+                                <p class="form-control mb-1 btn-sm">{{selectedBulletin.rang}}</p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Editable table -->
+        <!-- champs de formulaire ici -->
+        <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isGetBulletinPopupOpen" (click)="closeGetPopup()">Fermer</button>
+    </form>
+</div>
+<!------------------------------------------------------ Pop up pour ajouter un bulletin ----------------------------------->
