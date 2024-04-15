@@ -16,6 +16,7 @@ import {InscriptionComponent} from "./inscription/inscription.component";
 import {PresenceComponent} from "./presence/presence.component";
 import {AdmissionComponent} from "./admission/admission.component";
 import {AuthGuard} from "./auth.guard";
+import {CoursComponent} from "./cours/cours.component";
 
 const routes: Routes =[
   {
@@ -73,6 +74,11 @@ const routes: Routes =[
   {
     path: 'Admission',
     component: AdmissionComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Cours',
+    component: CoursComponent,
     canActivate: [AuthGuard]
   }
 ];

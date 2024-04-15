@@ -5,6 +5,7 @@ import {NoteService} from "../note/note.service";
 import {OngletBulletinService} from "./onglet-bulletin.service";
 import {any} from "codelyzer/util/function";
 import {CoursService} from "../cours/cours.service";
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-onglet-bulletin',
@@ -122,6 +123,11 @@ export class OngletBulletinComponent implements OnInit {
         const course = this.selectedBulletin.courses.find(course => course.id === courseId);
         return course ? course.name : 'Cours inconnu';
     }
+    // -------------------- Get Course Name only --------------------------
+    getCourseCredits(courseId: number): string {
+        const course = this.selectedBulletin.courses.find(course => course.id === courseId);
+        return course ? course.credits : 'Cours inconnu';
+    }
     // Création d'une classe
     onSubmit() {
         this.CreateBulletin();
@@ -161,6 +167,77 @@ export class OngletBulletinComponent implements OnInit {
             }
         );
     }
-  // -----------------------------------------------------------
+  // ----------------------- Download Bulletin ------------------------------------
+    //Nb il faut d'abord voir ou charger le tableau pour qu'il soit téléchargeable, c'est à dire que je dois pousser
+    // l'utilisateur à cliquer sur le botuon voir avant de cliquer sur télécharger sinon j'aurai une erreur null reference
+    downloadBulletin(index: number) {
+      this.selectBulletin(this.bulletinData[index]);
+        const bulletinId = index; // Identifiant du bulletin sélectionné
+        const bulletin = this.bulletinData[bulletinId]; // Obtenez les données du bulletin à partir de l'index
+
+        // Logique pour générer le PDF ou Excel du bulletin et le télécharger
+        // Vous pouvez utiliser des bibliothèques comme jsPDF ou ExcelJS pour générer les fichiers PDF ou Excel respectivement
+        // Exemple avec jsPDF pour le téléchargement d'un PDF
+        const doc = new jsPDF();
+        let yOffset = 10; // Décalage vertical initial
+
+        // Ajoutez le titre du bulletin
+        doc.text(`Titre du Bulletin: ${bulletin.titre}`, 10, yOffset);
+        yOffset += 10; // Augmentez le décalage vertical
+
+        // Ajoutez d'autres informations du bulletin
+        doc.text(`Date: ${bulletin.date}`, 10, yOffset);
+        yOffset += 10;
+
+        doc.text(`Élève: ${bulletin.students[0]?.lastName || ''} ${bulletin.students[0]?.firstName || ''}`, 10, yOffset);
+        yOffset += 10;
+
+        doc.text(`Appréciation: ${bulletin.remarque || ''}`, 10, yOffset);
+        yOffset += 10;
+
+        // Ajoutez une ligne pour séparer les informations
+        doc.line(10, yOffset, 200, yOffset);
+        yOffset += 10;
+
+        // Dessiner l'en-tête du tableau
+        doc.text('Matière', 15, yOffset);
+        doc.text('Note', 80, yOffset);
+
+        yOffset += 5;
+
+        // Dessiner une ligne sous l'en-tête
+        doc.line(15, yOffset, 190, yOffset);
+        yOffset += 5;
+
+        // Ajoutez les détails de la table de notes avec vérification
+        if (bulletin.notes && bulletin.notes.length > 0) {
+            bulletin.notes.forEach((note, index) => {
+                const courseName = note.courseIds && note.courseIds.length > 0 ? this.getCourseName(note.courseIds[0]) || 'Matière non spécifiée' : 'Matière non spécifiée';
+                const noteObtenue = note.noteObtenue !== undefined && note.noteObtenue !== null ? note.noteObtenue : 'Note non spécifiée';
+
+                // Dessiner le nom de la matière
+                doc.text(courseName, 15, yOffset);
+
+                // Dessiner la note obtenue
+                doc.text(noteObtenue.toString(), 80, yOffset);
+
+                yOffset += 7; // Augmentez le décalage vertical pour la prochaine ligne
+            });
+
+            // Dessiner la moyenne
+            doc.text('Moyenne', 15, yOffset);
+            doc.text(bulletin.moyenne || '', 80, yOffset);
+        } else {
+            // Gérer le cas où il n'y a pas de notes disponibles
+            doc.text('Aucune note disponible', 15, yOffset);
+            yOffset += 10;
+        }
+
+        // Sauvegardez le PDF
+        doc.save(`Bulletin_${bulletinId}.pdf`);
+
+        // TO DO afficher aussi le rang, le coefficient et Autres dans le pdf et ameliorer l'affichage
+    }
+
 
 }
