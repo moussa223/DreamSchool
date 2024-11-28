@@ -17,6 +17,7 @@ import {PresenceComponent} from "./presence/presence.component";
 import {AdmissionComponent} from "./admission/admission.component";
 import {AuthGuard} from "./auth.guard";
 import {CoursComponent} from "./cours/cours.component";
+import {PlanningComponent} from "./planning/planning.component";
 
 const routes: Routes =[
   {
@@ -61,6 +62,11 @@ const routes: Routes =[
     path: 'Calendrier',
     component: CalendrierComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'Planning',
+    component: PlanningComponent,
+    // canActivate: [AuthGuard]
   },
   {
     path: 'Inscription',

@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {CalendrierService} from "./calendrier.service";
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-calendrier',
@@ -6,11 +9,19 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calendrier.component.css']
 })
 export class CalendrierComponent implements OnInit {
+  // ------------------
+  planning: any;
+  pdfUrl: SafeUrl;
+  // -----------------
   currentMonth: any;
   days: string[];
   calendarDays: any;
 
-  constructor() {
+  constructor(
+      private route: ActivatedRoute,
+      private planningService: CalendrierService,
+      private sanitizer: DomSanitizer
+  ) {
     this.currentMonth = new Date(); // Month from your API or logic
     this.days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; // Days of the week
     this.generateCalendar();
@@ -26,6 +37,26 @@ export class CalendrierComponent implements OnInit {
     }
   }
   ngOnInit(): void {
+    const id = 2; // ID 2 statique pour l'exemple
+    this.planningService.getPlanningById(id).subscribe((data) => {
+      this.planning = data;
+      console.log(this.planning);
+
+      if (this.planning && this.planning.pdfFile) {
+        const byteCharacters = atob(this.planning.pdfFile);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'application/pdf' });
+        this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(URL.createObjectURL(blob));
+      } else {
+        console.error('PDF file not found in the response');
+      }
+    }, error => {
+      console.error('Error fetching planning', error);
+    });
   }
 
   prevMonth() {

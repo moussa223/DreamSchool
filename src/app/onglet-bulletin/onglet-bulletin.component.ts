@@ -15,7 +15,7 @@ import jsPDF from 'jspdf';
 export class OngletBulletinComponent implements OnInit {
   isAddBulletinPopupOpen = false; // le pop up d'ajout de bulletin est par défaut fermé
     isGetBulletinPopupOpen = false;
-
+// Ajouter un commentaire dans le fichier .ts pour actualiser le cache car l'affichge du bulletin Bug , a revoir
   studentsData: any;
   classRoomsData: any;
   selectedBulletin: any | null = null;

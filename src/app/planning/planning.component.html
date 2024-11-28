@@ -1,0 +1,432 @@
+
+<div class="dashboard">
+    <app-sidebare></app-sidebare>
+    <div class="content">
+        <p id="textDashboard">
+            Emploi du temps
+        </p>
+        <div class="info-container">
+            <div class= "container">
+                <div #content>
+                    <h1>Edition Emploi du temps</h1>
+                    <div id="form-container">
+                        <div class="form-group">
+                            <label for="class-select">Choisissez la classe concernée:</label>
+                            <select id="class-select" [(ngModel)]="planningService.planningModel.planningDto.className">
+                                <option value="" disabled selected>Choisir la classe concernée</option>
+                                <option *ngFor="let classe of this.classRoomData" [ngValue]="classe.name"> {{classe.name}} </option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Planning de la semaine du</label>
+                            <input type="date" id="date-select-start" [(ngModel)]="planningService.planningModel.planningDto.semaineDu">
+                            <label> au </label>
+                            <input type="date" id="date-select-end" [(ngModel)]="planningService.planningModel.planningDto.semaineAu">
+                        </div>
+                        <div class="form-group">
+                            <label>Commentaires: </label>
+                            <input type="text" placeholder="Tapez un commentaire" [(ngModel)]="planningService.planningModel.planningDto.commentaires">
+                        </div>
+
+                    </div>
+
+                    <div id="timetablecontainer">
+                        <table class="table table-bordered schedule-table">
+                            <thead class="table-dark">
+                            <tr>
+                                <th>Horaires</th>
+                                <th>Lundi</th>
+                                <th>Mardi</th>
+                                <th>Mercredi</th>
+                                <th>Jeudi</th>
+                                <th>Vendredi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Ligne pour 8h -->
+                            <tr>
+                                <th class="table-secondary">8h-9h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi8h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi8h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi8h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi8h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi8h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <!-- Ligne pour 9h -->
+                            <tr>
+                                <th class="table-secondary">9h-10h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi9h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi9h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi9h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi9h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi9h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            <!-- Ligne pour 10h -->
+                            <tr>
+                                <th class="table-secondary">10h-11h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi10h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi10h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi10h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi10h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi10h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- Ligne pour 11h -->
+                            <tr>
+                                <th class="table-secondary">11h-12h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi11h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi11h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi11h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs"  [(ngModel)]="planningService.planningModel.planningDto.Jeudi11h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi11h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- Ligne pour 12h -->
+                            <tr>
+                                <th class="table-secondary">12h-13h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi12h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi12h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi12h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi12h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi12h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- Ligne pour 13h -->
+                            <tr>
+                                <th class="table-secondary">13h-14h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi13h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi13h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi13h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi13h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi13h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- Ligne pour 14h -->
+                            <tr>
+                                <th class="table-secondary">14h-15h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi14h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi14h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi14h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi14h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi14h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- Ligne pour 15h -->
+                            <tr>
+                                <th class="table-secondary">15h-16h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi15h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi15h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi15h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi15h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi15h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- Ligne pour 16h -->
+                            <tr>
+                                <th class="table-secondary">16h-17h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi16h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi16h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi16h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi16h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi16h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- Ligne pour 17h -->
+                            <tr>
+                                <th class="table-secondary">17h-18h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi17h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi17h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi17h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi17h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi17h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <!-- Ligne pour 18h -->
+                            <tr>
+                                <th class="table-secondary">18h-19h</th>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Lundi18h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mardi18h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Mercredi18h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Jeudi18h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                                <td class="select-cell">
+                                    <select class="form-select-xs" [(ngModel)]="planningService.planningModel.planningDto.Vendredi18h">
+                                        <option value="" disabled selected>Choisir un cours</option>
+                                        <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <button type="submit" class="btn btn-sm btn-success mb-3" (click)="CreatePlanning()">Valider le Planning</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

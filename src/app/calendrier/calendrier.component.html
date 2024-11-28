@@ -5,24 +5,18 @@
             Calendrier
         </p>
         <div class="info-container">
-            <div class= "container">
-                <div class="calendar">
-                    <div class="header">
-                        <button (click)="prevMonth()">Previous</button>
-                        <h2>{{ currentMonth | date: 'MMMM yyyy' }}</h2>
-                        <button (click)="nextMonth()">Next</button>
-                    </div>
-                    <div class="days">
-                        <div *ngFor="let day of days" class="day">{{ day }}</div>
-                    </div>
-                    <div class="dates">
-                        <div *ngFor="let calendarDay of calendarDays" class="date" [class.empty]="!calendarDay.day">
-                            {{ calendarDay.day }}
-                        </div>
-                    </div>
-                </div>
+            <div class="container">
+                <div *ngIf="planning">
+                    <h1>{{ planning.name }}</h1>
+                    <p>Statut: {{ planning.statut }}</p>
+                    <p>Commentaires: {{ planning.commentaires }}</p>
+                    <p>Autres: {{ planning.autres }}</p>
 
+                    <h2>PDF:</h2>
+                    <iframe [src]="pdfUrl" width="100%" height="600px"></iframe>
+                </div>
             </div>
         </div>
+
     </div>
 </div>
