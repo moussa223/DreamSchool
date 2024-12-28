@@ -1,22 +1,948 @@
 <div class="dashboard">
     <app-sidebare></app-sidebare>
     <div class="content">
-        <p id="textDashboard">
-            Calendrier
-        </p>
+        <p id="textDashboard">Emploi du temps</p>
         <div class="info-container">
-            <div class="container">
-                <div *ngIf="planning">
-                    <h1>{{ planning.name }}</h1>
-                    <p>Statut: {{ planning.statut }}</p>
-                    <p>Commentaires: {{ planning.commentaires }}</p>
-                    <p>Autres: {{ planning.autres }}</p>
+            <!-- Liste des classes -->
+            <div *ngIf="!selectedClass">
+                <h3>Liste des Emploi du temps</h3>
+                <a type="button" class="btn btn-success mb-4" href="/Planning">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                    </svg>
+                </a>
+                <ul>
+                    <li id="PlanningByClass" *ngFor="let className of classesList" (click)="selectClass(className)">
+                        {{ className }}
+                    </li>
+                </ul>
 
-                    <h2>PDF:</h2>
-                    <iframe [src]="pdfUrl" width="100%" height="600px"></iframe>
+            </div>
+
+            <!-- Liste des plannings d'une classe -->
+            <div *ngIf="selectedClass">
+                <button (click)="selectedClass = null">Retour</button>
+                <h3>Plannings pour la classe {{ selectedClass }}</h3>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Semaine du</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let planning of displayedPlannings; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td><b>{{ planning.semaineDu }}</b> au <b>{{ planning.semaineAu }}</b></td>
+                        <td>
+                            <!-- Boutons d'action -->
+                            <button class="btn btn-sm btn-outline-primary" (click)="selectPlanning(planning)">Voir</button>
+                            <button class="btn btn-sm btn-outline-warning" (click)="selectPlanningToUpdate(planning)">Modifier</button>
+                            <button class="btn btn-sm btn-outline-info" (click)="selectPlanningToDownload(planning)">Télécharger</button>
+                            <button class="btn btn-sm btn-outline-danger" (click)="selectPlanningToDelete(planning)">Supprimer</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Précédent</button>
+                    <span>Page {{ currentPage }}</span>
+                    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage * itemsPerPage >= GroupedPlannings[selectedClass!].length">Suivant</button>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
+<!-- ----------------------------------- Zone Pop Up planning Details -------------------------      -->
+<!-- Pop up pour voir les détails d'une classe -->
+<div class="background-overlay" *ngIf="isPlanningDetailPopupOpen" (close)="ClosePlanningDetailsPopUp()"></div>
+<div class="popup-container" *ngIf="isPlanningDetailPopupOpen" (close)="ClosePlanningDetailsPopUp()">
+    <div *ngIf="selectedClass">
+        <h2>Détails du planning
+            <button type="button" class="btn btn-md btn-danger mt-1" *ngIf="isPlanningDetailPopupOpen" (click)="ClosePlanningDetailsPopUp()"> Fermer
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </button>
+        </h2>
+        <div class="container" id="planning-content">
+
+            <div class="table-responsive">
+                <table class="table table-bordered text-center">
+                    <thead>
+                    <tr class="bg-light-gray">
+                        <th class="text-uppercase">Time
+                        </th>
+                        <th class="text-uppercase">Monday</th>
+                        <th class="text-uppercase">Tuesday</th>
+                        <th class="text-uppercase">Wednesday</th>
+                        <th class="text-uppercase">Thursday</th>
+                        <th class="text-uppercase">Friday</th>
+                        <th class="text-uppercase">Saturday</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="align-middle">09:00am</td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">{{selectedPlanning.lundi8h}}</span>
+                            <div class="margin-10px-top font-size14">8:00-9:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mardi8h}}</span>
+                            <div class="margin-10px-top font-size14">8:00-9:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mercredi8h}}</span>
+                            <div class="margin-10px-top font-size14">8:00-9:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.jeudi8h}}</span>
+                            <div class="margin-10px-top font-size14">8:00-9:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi8h}}</span>
+                            <div class="margin-10px-top font-size14">8:00-9:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+                           <!--
+                            <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">None</span>
+                            <div class="margin-10px-top font-size14">8:00-9:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                            -->
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">10:00am</td>
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.lundi9h}}</span>
+                            <div class="margin-10px-top font-size14">9:00-10:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mardi9h}}</span>
+                            <div class="margin-10px-top font-size14">9:00-10:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mercredi9h}}</span>
+                            <div class="margin-10px-top font-size14">9:00-10:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.jeudi9h}}</span>
+                            <div class="margin-10px-top font-size14">9:00-10:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi9h}}</span>
+                            <div class="margin-10px-top font-size14">9:00-10:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">11:00am</td>
+                        <td>
+                            <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.lundi10h}}</span>
+                            <div class="margin-10px-top font-size14">10:00-11:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mardi10h}}</span>
+                            <div class="margin-10px-top font-size14">10:00-11:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mercredi10h}}</span>
+                            <div class="margin-10px-top font-size14">10:00-11:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.jeudi10h}}</span>
+                            <div class="margin-10px-top font-size14">10:00-11:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi10h}}</span>
+                            <div class="margin-10px-top font-size14">10:00-11:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">12:00am</td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.lundi11h}}</span>
+                            <div class="margin-10px-top font-size14">11:00-12:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mardi11h}}</span>
+                            <div class="margin-10px-top font-size14">11:00-12:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mercredi11h}}</span>
+                            <div class="margin-10px-top font-size14">11:00-12:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.jeudi11h}}</span>
+                            <div class="margin-10px-top font-size14">11:00-12:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi11h}}</span>
+                            <div class="margin-10px-top font-size14">11:00-12:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">1:00pm</td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.lundi12h}}</span>
+                            <div class="margin-10px-top font-size14">12:00-1:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mardi12h}}</span>
+                            <div class="margin-10px-top font-size14">12:00-1:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mercredi12h}}</span>
+                            <div class="margin-10px-top font-size14">12:00-1:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.jeudi12h}}</span>
+                            <div class="margin-10px-top font-size14">12:00-1:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi12h}}</span>
+                            <div class="margin-10px-top font-size14">12:00-1:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">2:00pm</td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-25px-lr border-radius-5 margin-20px-bottom text-white font-size26  xs-font-size23">{{selectedPlanning.lundi13h}}</span>
+                            <div class="margin-20px-top font-size24">1:00-2:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-25px-lr border-radius-5 margin-20px-bottom text-white font-size26  xs-font-size23">{{selectedPlanning.mardi13h}}</span>
+                            <div class="margin-20px-top font-size24">1:00-2:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-25px-lr border-radius-5 margin-20px-bottom text-white font-size26  xs-font-size23">{{selectedPlanning.mercredi13h}}</span>
+                            <div class="margin-20px-top font-size24">1:00-2:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-25px-lr border-radius-5 margin-20px-bottom text-white font-size26  xs-font-size23">{{selectedPlanning.jeudi13h}}</span>
+                            <div class="margin-20px-top font-size24">1:00-2:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-25px-lr border-radius-5 margin-20px-bottom text-white font-size26  xs-font-size23">{{selectedPlanning.vendredi13h}}</span>
+                            <div class="margin-20px-top font-size24">1:00-2:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">3:00pm</td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-25px-lr border-radius-5 margin-20px-bottom text-white font-size26  xs-font-size23">{{selectedPlanning.lundi14h}}</span>
+                            <div class="margin-20px-top font-size24">2:00-3:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-25px-lr border-radius-5 margin-20px-bottom text-white font-size26  xs-font-size23">{{selectedPlanning.mardi14h}}</span>
+                            <div class="margin-20px-top font-size24">2:00-3:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-25px-lr border-radius-5 margin-20px-bottom text-white font-size26  xs-font-size23">{{selectedPlanning.mercredi14h}}</span>
+                            <div class="margin-20px-top font-size24">2:00-3:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-25px-lr border-radius-5 margin-20px-bottom text-white font-size26  xs-font-size23">{{selectedPlanning.jeudi14h}}</span>
+                            <div class="margin-20px-top font-size24">2:00-3:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi14h}}</span>
+                            <div class="margin-20px-top font-size24">2:00-3:00</div>
+                            <div class="font-size23 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">4:00pm</td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.lundi15h}}</span>
+                            <div class="margin-10px-top font-size15">3:00-4:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mardi15h}}</span>
+                            <div class="margin-10px-top font-size15">3:00-4:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mercredi15h}}</span>
+                            <div class="margin-10px-top font-size15">3:00-4:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.jeudi15h}}</span>
+                            <div class="margin-10px-top font-size15">3:00-4:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi15h}}</span>
+                            <div class="margin-10px-top font-size15">3:00-4:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">5:00pm</td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.lundi16h}}</span>
+                            <div class="margin-10px-top font-size15">4:00-5:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mardi16h}}</span>
+                            <div class="margin-10px-top font-size15">4:00-5:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mercredi16h}}</span>
+                            <div class="margin-10px-top font-size15">4:00-5:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.jeudi16h}}</span>
+                            <div class="margin-10px-top font-size15">4:00-5:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi16h}}</span>
+                            <div class="margin-10px-top font-size15">4:00-5:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">6:00pm</td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.lundi17h}}</span>
+                            <div class="margin-10px-top font-size15">5:00-6:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mardi17h}}</span>
+                            <div class="margin-10px-top font-size15">5:00-6:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mercredi17h}}</span>
+                            <div class="margin-10px-top font-size15">5:00-6:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.jeudi17h}}</span>
+                            <div class="margin-10px-top font-size15">5:00-6:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi17h}}</span>
+                            <div class="margin-10px-top font-size15">5:00-6:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="align-middle">7:00pm</td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.lundi18h}}</span>
+                            <div class="margin-10px-top font-size15">6:00-7:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mardi18h}}</span>
+                            <div class="margin-10px-top font-size15">6:00-7:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.mercredi18h}}</span>
+                            <div class="margin-10px-top font-size15">6:00-7:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.jeudi18h}}</span>
+                            <div class="margin-10px-top font-size15">6:00-7:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td>
+                            <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{selectedPlanning.vendredi18h}}</span>
+                            <div class="margin-10px-top font-size15">6:00-7:00</div>
+                            <div class="font-size13 text-light-gray">Professor</div>
+                        </td>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+    </div>
+
+</div>
+<!--  ----------------------------------- Zone Pop Up planning Details -------------------------  -->
+
+<!--  ----------------------------------- Pop Up Update ClassRoom -------------------------  -->
+
+<!-- <input type="text" [value]="selectedClass.infos"> pour la modification d'une classe donc le formulaire cotiendra
+ les infos de la classe par défaut et ça sera à l'utilisateur de le modifier ou pas -->
+
+<div class="background-overlay" *ngIf="isUpdatePlanningPopUpOpen" (close)="closeUpdatePlanningPopup()"></div>
+<div class="popup-container" *ngIf="isUpdatePlanningPopUpOpen" (close)="closeUpdatePlanningPopup()">
+    <div class="row">
+        <h2>Modification du planning</h2>
+    </div>
+    <form>
+        <!-- Debut champs de formulaire ici -->
+        <div #content>
+            <div id="form-container">
+                <div class="form-group">
+                    <label for="class-select">Choisissez la classe concernée:</label>
+                    <select id="class-select" [(ngModel)]="updatedPlanningDto.className">
+                        <option value="" disabled selected>Choisir la classe concernée</option>
+                        <option *ngFor="let classe of this.classRoomData" [ngValue]="classe.name"> {{classe.name}} </option>
+                    </select>
+                    <span class="badge badge-pill badge-warning ml-2">Valeur Actuelle: {{selectedPlanning.className}}</span>
+                </div>
+                <div class="form-group">
+                    <label>Semaine du</label>
+                    <input type="date" id="date-select-start" [(ngModel)]="updatedPlanningDto.semaineDu">
+                    <label> au </label>
+                    <input type="date" id="date-select-end" [(ngModel)]="updatedPlanningDto.semaineAu">
+                    <span class="badge badge-pill badge-warning ml-4">Valeur Actuelle: {{selectedPlanning.semaineDu}}</span>
+                    <span class="badge badge-pill badge-warning ml-4">Valeur Actuelle: {{selectedPlanning.semaineAu}}</span>
+                </div>
+                <div class="form-group">
+                    <label>Commentaires: </label>
+                    <input type="text" [(ngModel)]="updatedPlanningDto.commentaires">
+                    <span class="badge badge-pill badge-warning ml-4">Valeur Actuelle: {{selectedPlanning.commentaires}}</span>
+                </div>
+
+            </div>
+
+            <div id="timetablecontainer">
+                <table class="table table-bordered schedule-table">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Horaires</th>
+                        <th>Lundi</th>
+                        <th>Mardi</th>
+                        <th>Mercredi</th>
+                        <th>Jeudi</th>
+                        <th>Vendredi</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- Ligne pour 8h -->
+                    <tr>
+                        <th class="table-secondary">8h-9h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi8h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi8h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi8h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi8h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi8h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi8h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi8h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi8h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi8h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi8h}}</span>
+                        </td>
+                    </tr>
+
+                    <!-- Ligne pour 9h -->
+                    <tr>
+                        <th class="table-secondary">9h-10h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi9h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi9h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi9h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi9h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi9h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi9h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi9h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi9h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi9h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi9h}}</span>
+                        </td>
+                    </tr>
+
+                    <!-- Ligne pour 10h -->
+                    <tr>
+                        <th class="table-secondary">10h-11h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi10h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi10h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi10h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi10h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi10h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi10h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi10h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi10h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi10h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi10h}}</span>
+                        </td>
+                    </tr>
+                    <!-- Ligne pour 11h -->
+                    <tr>
+                        <th class="table-secondary">11h-12h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi11h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi11h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi11h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi11h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi11h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi11h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs"  [(ngModel)]="updatedPlanningDto.jeudi11h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi11h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi11h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi11h}}</span>
+                        </td>
+                    </tr>
+                    <!-- Ligne pour 12h -->
+                    <tr>
+                        <th class="table-secondary">12h-13h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi12h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi12h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi12h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi12h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi12h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi12h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi12h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi12h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi12h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi12h}}</span>
+                        </td>
+                    </tr>
+                    <!-- Ligne pour 13h -->
+                    <tr>
+                        <th class="table-secondary">13h-14h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi13h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi13h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi13h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi13h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi13h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi13h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi13h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi13h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi13h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi13h}}</span>
+                        </td>
+                    </tr>
+                    <!-- Ligne pour 14h -->
+                    <tr>
+                        <th class="table-secondary">14h-15h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi14h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi14h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi14h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi14h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi14h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi14h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi14h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi14h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi14h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi14h}}</span>
+                        </td>
+                    </tr>
+                    <!-- Ligne pour 15h -->
+                    <tr>
+                        <th class="table-secondary">15h-16h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi15h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi15h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi15h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi15h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi15h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi15h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi15h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi15h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi15h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi15h}}</span>
+                        </td>
+                    </tr>
+                    <!-- Ligne pour 16h -->
+                    <tr>
+                        <th class="table-secondary">16h-17h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi16h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi16h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi16h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi16h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi16h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi16h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi16h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi16h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi16h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi16h}}</span>
+                        </td>
+                    </tr>
+                    <!-- Ligne pour 17h -->
+                    <tr>
+                        <th class="table-secondary">17h-18h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi17h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi17h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi17h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi17h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi17h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi17h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi17h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi17h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi17h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi17h}}</span>
+                        </td>
+                    </tr>
+                    <!-- Ligne pour 18h -->
+                    <tr>
+                        <th class="table-secondary">18h-19h</th>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.lundi18h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.lundi18h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mardi18h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mardi18h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.mercredi18h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.mercredi18h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.jeudi18h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.jeudi18h}}</span>
+                        </td>
+                        <td class="select-cell">
+                            <select class="form-select-xs" [(ngModel)]="updatedPlanningDto.vendredi18h">
+                                <option value="" disabled selected>Choisir un cours</option>
+                                <option *ngFor="let course of this.courseData" [ngValue]="course.name"> {{course.name}} </option>
+                            </select>
+                            <span class="badge badge-pill badge-warning">Valeur Actuelle: {{selectedPlanning.vendredi18h}}</span>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Fin champs de formulaire -->
+        <button type="submit" class="btn btn-sm btn-warning mr-2 mt-1" (click)="Updateplanning()">Modifier</button>
+        <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isUpdatePlanningPopUpOpen" (click)="closeUpdatePlanningPopup()">Annuler</button>
+    </form>
+</div>
+<!--  ----------------------------------- End Pop Up Update class  -------------------------  -->
