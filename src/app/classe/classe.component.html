@@ -34,7 +34,7 @@
                         <input type="text"  placeholder="Chercher une classe" id="input-search-class" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
                 </div>
-                <!-- Pop up pour ajouter une classe -->
+                <!------------------- Pop up pour ajouter une classe ----------------------->
                 <div class="background-overlay" *ngIf="isPopupOpen" (close)="closePopup()"></div>
                 <div class="popup-container" *ngIf="isPopupOpen" (close)="closePopup()">
                     <div class="row">
@@ -73,7 +73,7 @@
                         <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isPopupOpen" (click)="closePopup()">Annuler</button>
                     </form>
                 </div>
-                <!-- Pop up pour ajouter une Classe -->
+                <!---------- Fin Pop up pour ajouter une Classe ------------->
                 <div class="row">
                     <div class="col-sm-3" id="add-class" (click)="openPopup()">
                         Ajoutez des classes

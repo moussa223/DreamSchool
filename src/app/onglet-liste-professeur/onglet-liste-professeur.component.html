@@ -13,7 +13,7 @@
     </div>
     <div class="col-6">
         <span id="nbr-classes">
-            3 professeurs
+            {{teacherData.length}} professeurs
         </span>
         <div class="vr"></div>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -25,45 +25,30 @@
         <div class="row">
 
             <div class="col">
-                <button type="button" class="btn btn-outline-dark">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
-                    </svg>
-                    Contact
-                </button>
+
             </div>
         </div>
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-3" id="add-class">
-        Ajoutez un élève
+    <div class="col-sm-3" id="add-class" (click)="openAddTeacherPopUp()">
+        Ajoutez un professeur
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
             <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
         </svg>
     </div>
-    <div class="col-sm-3" id="cours-list">
+    <div class="col-sm-3" id="cours-list" *ngFor="let teacher of this.teacherData" (click)="selectTeacher(teacher)">
         <div class="row">
             <div class="col-10">
-                Nom Professeur
+                {{teacher.lastName}} {{teacher.firstName}}
                 <br>
                 <span id="date-annee-inscription">
-                    Inscrit le 18/10/2023
+                    {{teacher.email}}
                 </span>
                 <br>
-                <svg xmlns="http://www.w3.org/2000/svg" style="color: green;" width="16" height="16" fill="currentColor" class="bi bi-mortarboard" viewBox="0 0 16 16">
-                    <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5ZM8 8.46 1.758 5.965 8 3.052l6.242 2.913L8 8.46Z"/>
-                    <path d="M4.176 9.032a.5.5 0 0 0-.656.327l-.5 1.7a.5.5 0 0 0 .294.605l4.5 1.8a.5.5 0 0 0 .372 0l4.5-1.8a.5.5 0 0 0 .294-.605l-.5-1.7a.5.5 0 0 0-.656-.327L8 10.466 4.176 9.032Zm-.068 1.873.22-.748 3.496 1.311a.5.5 0 0 0 .352 0l3.496-1.311.22.748L8 12.46l-3.892-1.556Z"/>
-                </svg>
-                <span>
-                    Cl 1
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-book" viewBox="0 0 16 16">
-                    <path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811V2.828zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492V2.687zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
-                </svg>
-                <span>
-                    6 Cours
+                <span id="phone">
+                    Tel: {{teacher.phone}}
                 </span>
             </div>
             <div class="col-2">
@@ -82,3 +67,250 @@
     </div>
 </div>
 
+<!-- ----------------------------------- Zone Pop Up Add Teacher -------------------------      -->
+<!-- Pop up pour Ajouter un Teacher -->
+<div class="background-overlay" *ngIf="isAddTeacherPopupOpen" (close)="CloseAddTeacherPopUp()"></div>
+<div class="popup-container" *ngIf="isAddTeacherPopupOpen" (close)="CloseAddTeacherPopUp()">
+    <!--  -----------------------------------------------------------  -->
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <header>Ajout d'un professeur</header>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-md btn-danger mt-1" *ngIf="isAddTeacherPopupOpen" (click)="CloseAddTeacherPopUp()"> Annuler
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <form class="form">
+            <div class="column">
+                <div class="input-box">
+                    <label>Nom</label>
+                    <input placeholder="Entrez le nom" type="text" [(ngModel)]="professeurService.teacherModel.teacherDto.lastName">
+                </div>
+                <div class="input-box">
+                    <label>Prenom</label>
+                    <input placeholder="Entrez le prenom" type="text" [(ngModel)]="professeurService.teacherModel.teacherDto.firstName">
+                </div>
+            </div>
+            <div class="column">
+                <div class="input-box">
+                    <label>Email</label>
+                    <input placeholder="Entrez l'email" type="text" [(ngModel)]="professeurService.teacherModel.teacherDto.email">
+                </div>
+                <div class="input-box">
+                    <label>Nationnalité</label>
+                    <input placeholder="Entrez la nationnalité" type="text" [(ngModel)]="professeurService.teacherModel.teacherDto.nationality">
+                </div>
+
+            </div>
+            <div class="column">
+                <div class="input-box">
+                    <label>Date de naissance</label>
+                    <input placeholder="Date de naissance" type="date" [(ngModel)]="professeurService.teacherModel.teacherDto.dateOfBirth">
+                </div>
+                <div class="input-box">
+                    <label>Téléphone</label>
+                    <input placeholder="Entrez le numero de téléphone" type="text" [(ngModel)]="professeurService.teacherModel.teacherDto.phone">
+                </div>
+                <div class="input-box">
+                    <label>Fix</label>
+                    <input placeholder="Remplir si necessaire" type="text" [(ngModel)]="professeurService.teacherModel.teacherDto.cellPhone">
+                </div>
+            </div>
+
+            <div class="input-box address">
+                <label>Addresse</label>
+                <input placeholder="Entrez le nom de la rue" type="text" [(ngModel)]="professeurService.teacherModel.teacherDto.street">
+                <div class="column">
+                    <input placeholder="Entrez le code postal" type="text" [(ngModel)]="professeurService.teacherModel.teacherDto.postalCode">
+                    <input placeholder="Entrez le nom de la ville" type="text" [(ngModel)]="professeurService.teacherModel.teacherDto.city">
+                </div>
+            </div>
+            <div class="column mt-3">
+                <select id="selectedCourses" [(ngModel)]="professeurService.teacherModel.teacherDto.courseIds"  class="form-control form-control-sm" name="selectedCourses"  multiple>
+                    <option value="" disabled selected>Selectionnez les matières enseignés par ce professeur</option>
+                    <option *ngFor="let course of this.courseData" [ngValue]="course.id"> {{course.name}} </option>
+                </select>
+            </div>
+            <button (click)="onSubmit()">Ajouter</button>
+        </form>
+    </section>
+    <!--  -----------------------------------------------------------  -->
+        <br>
+</div>
+<!--  ----------------------------------- Fin  Zone Pop Up Add Teacher -------------------------  -->
+
+<!-- ----------------------------------- Zone Pop Up Teacher Details -------------------------      -->
+<!-- Pop up pour voir les détails d'une classe -->
+<div class="background-overlay" *ngIf="isTeacherDetailPopUpOpen" (close)="CloseTeacherDetailsPopUp()"></div>
+<div class="popup-container" *ngIf="isTeacherDetailPopUpOpen" (close)="CloseTeacherDetailsPopUp()">
+    <div *ngIf="selectedTeacher">
+        <h2>Détails
+            <button type="button" class="btn btn-md btn-danger mt-1" *ngIf="isTeacherDetailPopUpOpen" (click)="CloseTeacherDetailsPopUp()"> Fermer
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </button>
+        </h2>
+        <div id="main-content">
+            <div id="visitenkarte">
+                <div id="header">
+                    <img
+                            id="portrait"
+                            src="https://cdn-icons-png.flaticon.com/512/3106/3106773.png"
+                            alt="Singer"
+                    />
+                    <div id="info">
+                        <h6 id="name">{{selectedTeacher.lastName}} {{selectedTeacher.firstName}}</h6>
+                        <small id="profession">{{selectedTeacher.phone}}</small>
+                    </div>
+                </div>
+                <div id="tagline">
+                    <p>
+                        Est de nationnalité <strong>{{selectedTeacher.nationality}}</strong>,
+                        vous pouvez le contacter par mail à <strong>{{selectedTeacher.email}}</strong>
+                        ou par téléphone au <strong>{{selectedTeacher.phone}}</strong>
+                        <br>
+                        Né(e) le <strong>{{selectedTeacher.dateOfBirth}}</strong>,
+                        {{selectedTeacher.firstName}} réside au <strong>{{selectedTeacher.street}}
+                        {{selectedTeacher.postalCode}} {{selectedTeacher.city}}</strong>
+                        <br>
+                        Enseigne actuellement les matières suivantes:
+                        <br>
+                        <strong *ngFor="let course of selectedTeacher.courses">{{course.name}}
+                            <button class="btn btn-outline-danger mt-1" (click)="DeleteTeacherCourses(course)" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-lg" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2 8a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11A.5.5 0 0 1 2 8"/>
+                                </svg>
+                            </button>
+                            <br>
+                        </strong>
+                    </p>
+                    <div class="column mt-3" *ngIf="isAddCourseToTeacherPopUp">
+                        <select id="selectedCourses1" [(ngModel)]="professeurService.AddCourseToTeacherModel.courseIds"  class="form-control form-control-sm" name="selectedCourses"  multiple>
+                            <option value="" disabled selected>Attribuer les matières au professeur</option>
+                            <option *ngFor="let course of this.courseData" [ngValue]="course.id"> {{course.name}} </option>
+                        </select>
+                        <button class="btn btn-info mt-2" (click)="AddCoursesToTeacher()">Ajouter</button>
+                        <button class="btn btn-danger mt-2 ml-2" (click)="closeAddCourseToTeacherPopUp()"> Annuler</button>
+                    </div>
+                </div>
+                <div id="social">
+                    <div id="social--collapsed">
+                        <button class="btn btn-success" (click)="openAddCourseToTeacherPopUp()" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-folder-plus" viewBox="0 0 16 16">
+                                <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z"/>
+                                <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5"/>
+                            </svg>
+                        </button>
+
+                        <button class="btn btn-warning" type="submit" (click)="openUpdateTeacherPopup()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                            </svg>
+                        </button>
+                        <button class="btn btn-danger" type="submit" (click)="selectTeacherToDelete(selectedTeacher)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-dash" viewBox="0 0 16 16">
+                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7M11 12h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1 0-1m0-7a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--  NB: Pour connaître l'id de la classe il faut utiliser {{ ClassRoomCourse.id }} -->
+    </div>
+</div>
+<!--  ----------------------------------- Fin Zone Pop Up Teacher Details -------------------------  -->
+
+
+<!-- ----------------------------------- Zone Pop Up Update Teacher -------------------------      -->
+<!-- Pop up pour Ajouter un Teacher -->
+<div class="background-overlay" *ngIf="isUpdateTeacherPopUpOpen" (close)="closeUpdateTeacherPopup()"></div>
+<div class="popup-container" *ngIf="isUpdateTeacherPopUpOpen" (close)="closeUpdateTeacherPopup()">
+    <!--  -----------------------------------------------------------  -->
+    <section class="container">
+        <div class="row">
+            <div class="col">
+                <header>Modification du Professeur:
+                    <br>
+                    <span id="UpdateSpanTagName">{{selectedTeacher.lastName}} {{selectedTeacher.firstName}}</span>
+                </header>
+            </div>
+            <div class="col">
+                <button type="button" class="btn btn-md btn-danger mt-1" *ngIf="isUpdateTeacherPopUpOpen" (click)="closeUpdateTeacherPopup()"> Annuler
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <form class="form">
+            <div class="column">
+                <div class="input-box">
+                    <label>Nom</label>
+                    <input placeholder="Entrez le nom" type="text" [(ngModel)]="updatedTeacherDto.lastName">
+                    <span class="bg-warning mt-1">{{selectedTeacher.lastName}}</span>
+                </div>
+                <div class="input-box">
+                    <label>Prenom</label>
+                    <input placeholder="Entrez le prenom" type="text" [(ngModel)]="updatedTeacherDto.firstName">
+                    <span class="bg-warning mt-1">{{selectedTeacher.firstName}}</span>
+                </div>
+            </div>
+            <div class="column">
+                <div class="input-box">
+                    <label>Email</label>
+                    <input placeholder="Entrez l'email" type="text" [(ngModel)]="updatedTeacherDto.email">
+                    <span class="bg-warning mt-1">{{selectedTeacher.email}}</span>
+                </div>
+                <div class="input-box">
+                    <label>Nationnalité</label>
+                    <input placeholder="Entrez la nationnalité" type="text" [(ngModel)]="updatedTeacherDto.nationality">
+                    <span class="bg-warning mt-1">{{selectedTeacher.nationality}}</span>
+                </div>
+
+            </div>
+            <div class="column">
+                <div class="input-box">
+                    <label>Date de naissance</label>
+                    <input placeholder="Date de naissance" type="date" [(ngModel)]="updatedTeacherDto.dateOfBirth">
+                    <span class="bg-warning mt-1">{{selectedTeacher.dateOfBirth}}</span>
+                </div>
+                <div class="input-box">
+                    <label>Téléphone</label>
+                    <input placeholder="Entrez le numero de téléphone" type="text" [(ngModel)]="updatedTeacherDto.phone">
+                    <span class="bg-warning mt-1">{{selectedTeacher.phone}}</span>
+                </div>
+                <div class="input-box">
+                    <label>Fix</label>
+                    <input placeholder="Remplir si necessaire" type="text" [(ngModel)]="updatedTeacherDto.cellPhone">
+                    <span class="bg-warning mt-1">{{selectedTeacher.cellPhone}}</span>
+                </div>
+            </div>
+
+            <div class="input-box address">
+                <label>Addresse</label>
+                <input placeholder="Entrez le nom de la rue" type="text" [(ngModel)]="updatedTeacherDto.street">
+                <span class="bg-warning mt-1">{{selectedTeacher.street}}</span>
+                <div class="column">
+                    <input placeholder="Entrez le code postal" type="text" [(ngModel)]="updatedTeacherDto.postalCode">
+                    <span class="bg-warning mt-1">{{selectedTeacher.postalCode}}</span>
+                    <input placeholder="Entrez le nom de la ville" type="text" [(ngModel)]="updatedTeacherDto.city">
+                    <span class="bg-warning mt-1">{{selectedTeacher.city}}</span>
+                </div>
+            </div>
+            <button id="Updateteacher" (click)="UpdateTeacher()">Modifier</button>
+        </form>
+    </section>
+    <!--  -----------------------------------------------------------  -->
+    <br>
+</div>
+<!--  ----------------------------------- Fin  Zone Pop Up Update Teacher -------------------------  -->
