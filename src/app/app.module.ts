@@ -29,6 +29,7 @@ import { ClasseDetailsComponent } from './classe-details/classe-details.componen
 import { OngletBulletinComponent } from './onglet-bulletin/onglet-bulletin.component';
 import { OngletNotesComponent } from './onglet-notes/onglet-notes.component';
 import { PlanningComponent } from './planning/planning.component';
+import { OngletSeanceComponent } from './onglet-seance/onglet-seance.component';
 
 
 @NgModule({
@@ -66,6 +67,7 @@ import { PlanningComponent } from './planning/planning.component';
     OngletBulletinComponent,
     OngletNotesComponent,
     PlanningComponent,
+    OngletSeanceComponent,
 
 
   ],

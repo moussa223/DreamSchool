@@ -7,11 +7,34 @@
         <div class="info-container">
             <div class= "container">
                 <div class="row">
-                    <div class="col-sm-4">
-                        Filters
-                    </div>
-                    <div class="col-8">
-                        Jeudi 10/08/2023
+                    <div class="tabbed-content">
+                        <div class="tabs">
+                            <div
+                                    class="tab"
+                                    *ngFor="let tab of tabs"
+                                    [class.active]="tab === activeTab"
+                                    (click)="setActiveTab(tab)"
+                            >
+                                {{ tab }}
+                            </div>
+                        </div>
+                        <div class="contentt">
+                            <!-- Contenu de l'onglet 1 -->
+                            <div *ngIf="activeTab === 'Liste des séances'">
+                                <app-onglet-seance></app-onglet-seance>
+                            </div>
+
+                            <!-- Contenu de l'onglet 2 -->
+                            <div *ngIf="activeTab === 'Gestion des présences'">
+                                Contenu de l'onglet Présences
+                            </div>
+
+                            <!-- Contenu de l'onglet 3 -->
+                            <div *ngIf="activeTab === 'Actions'">
+                                Contenu de l'onglet Actions
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>

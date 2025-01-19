@@ -1,0 +1,105 @@
+.seance-form-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.seance-list {
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+h2, h3 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.btn-add {
+    display: block;
+}
+/*--------------------------------------------------*/
+/* ----------------------------- */
+/* popup.component.css */
+.popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-height: 500px;/* Ajustez cette valeur selon vos besoins */
+    overflow-y: auto;
+}
+
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+/* Fin popup.component.css */
+/* ---------------------------------- */
+/*--------------Style du pop up Presence Seance  -------------------------------------------------------------------*/
+body {
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #007bff;
+}
+
+.seance-header {
+    margin-bottom: 30px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-save {
+    margin-top: 20px;
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+table th, table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.status-select {
+    width: 100px;
+}
+
+.comment-input {
+    resize: vertical;
+    height: 40px;
+}
+/*--------------Style du pop up Presence Seance  -------------------------------------------------------------------*/

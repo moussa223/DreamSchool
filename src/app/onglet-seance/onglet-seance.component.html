@@ -1,0 +1,164 @@
+<div class="seance-list">
+    <button class="btn btn-success btn-add" (click)="OpenAddSeancePopUp()">Ajouter une Séance</button>
+    <h3>Liste des Séances</h3>
+    <ul class="list-group">
+        <li class="list-group-item" *ngFor="let seance of seanceData">
+            {{seance.name}} - {{seance.date}} - {{seance.heureDeDebut}} à {{seance.heureDeFin}}
+            <button class="btn btn-outline-info ml-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                </svg>
+            </button>
+            <button class="btn btn-outline-success ml-3" (click)="selectSeance(seance)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2-square" viewBox="0 0 16 16">
+                    <path d="M3 14.5A1.5 1.5 0 0 1 1.5 13V3A1.5 1.5 0 0 1 3 1.5h8a.5.5 0 0 1 0 1H3a.5.5 0 0 0-.5.5v10a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5V8a.5.5 0 0 1 1 0v5a1.5 1.5 0 0 1-1.5 1.5z"/>
+                    <path d="m8.354 10.354 7-7a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0"/>
+                </svg>
+            </button>
+            <button class="btn btn-outline-warning ml-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                </svg>
+            </button>
+            <button class="btn btn-outline-danger ml-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+            </button>
+        </li>
+    </ul>
+
+</div>
+
+<!-- Pop up pour ajouter une seance -->
+<div class="background-overlay" *ngIf="isAddSeancePopUpOpen" (close)="CloseAddSeancePopUp()"></div>
+<div class="popup-container" *ngIf="isAddSeancePopUpOpen" (close)="CloseAddSeancePopUp()">
+    <div class="row">
+        <h2>Ajouter une seance</h2>
+
+    </div>
+    <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isAddSeancePopUpOpen" (click)="CloseAddSeancePopUp()">Annuler</button>
+    <form>
+        <!-- champs de formulaire ici -->
+        <div class="seance-form-container" id="seanceForm">
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="name">Nom de la Séance</label>
+                    <input type="text" id="name" name="name" class="form-control" [(ngModel)]="presenceService.seanceModel.seanceDto.name" placeholder="Nom de la séance" />
+                </div>
+                <div class="col-sm-6">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" class="form-control" [(ngModel)]="presenceService.seanceModel.seanceDto.date" />
+                </div>
+                <div class="col-sm-6">
+                    <label for="heureDeDebut">Heure de Début</label>
+                    <input type="time" id="heureDeDebut" name="heureDeDebut" class="form-control" [(ngModel)]="presenceService.seanceModel.seanceDto.heureDeDebut" />
+                </div>
+                <div class="col-sm-6">
+                    <label for="heureDeFin">Heure de Fin</label>
+                    <input type="time" id="heureDeFin" name="heureDeFin" class="form-control" [(ngModel)]="presenceService.seanceModel.seanceDto.heureDeFin" />
+                </div>
+                <div class="col-sm-6">
+                    <label for="statut">Statut</label>
+                    <select id="statut" name="statut" class="form-control" [(ngModel)]="presenceService.seanceModel.seanceDto.statut">
+                        <option value="">-- Sélectionner un statut --</option>
+                        <option value="Validée">Validée</option>
+                        <option value="Non Validée">Non Validée</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label for="autres">Autres</label>
+                    <input type="text" id="autres" name="autres" class="form-control" placeholder="Informations optionnelles" [(ngModel)]="presenceService.seanceModel.seanceDto.autres" />
+                </div>
+
+            </div>
+
+                <div class="form-group">
+                    <label for="commentaires">Commentaires</label>
+                    <textarea id="commentaires" name="commentaires" class="form-control" placeholder="Ajoutez des commentaires" [(ngModel)]="presenceService.seanceModel.seanceDto.commentaires"></textarea>
+                </div>
+                <div class="form-group">
+
+                </div>
+                <div class="form-group">
+                    <label for="selectedCourses">Cours</label>
+                    <select id="selectedCourses" [(ngModel)]="presenceService.seanceModel.seanceDto.courseIds" class="form-control form-control-sm" name="selectedCourses"  multiple>
+                        <option value="" disabled selected>Choisissez le cours de la séance</option>
+                        <option *ngFor="let course of this.courseData" [ngValue]="course.id"> {{course.name}} </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" (click)="onSubmit()">Créer</button>
+        </div>
+        <!-- champs de formulaire ici -->
+    </form>
+</div>
+<!-- Fin du Pop up pour ajouter une seance -->
+
+<!-- --------------------------------- Pop Up Seance Details -------------------------      -->
+<!-- Pop up pour voir les détails d'une classe -->
+<div class="background-overlay" *ngIf="isCheckSeancePresencePopUpOpen" (close)="CloseCheckSeancePresencePopUp()"></div>
+<div class="popup-container" *ngIf="isCheckSeancePresencePopUpOpen" (close)="CloseCheckSeancePresencePopUp()">
+    <div *ngIf="selectedSeance">
+        <div class="container">
+
+            <h2>Suivi des Absences et Présences</h2>
+            <button type="submit" class="btn btn-danger" (click)="CloseCheckSeancePresencePopUp()">Annuler</button>
+            <div class="seance-header">
+                <h4>Détails de la Séance</h4>
+                <p><strong>Nom :</strong> {{selectedSeance.name}}</p>
+                <p><strong>Date :</strong> {{selectedSeance.date}}</p>
+                <p><strong>Horaire :</strong> {{selectedSeance.heureDeDebut}} - {{selectedSeance.heureDeFin}}</p>
+                <div class="row">
+                    <div class="col-3">
+                        <strong>Classe :</strong>
+                    </div>
+                    <div class="col-6">
+                        <select id="selectedClassRoom" class="form-select" name="selectedClassRoom" [(ngModel)]="selectedClass" (change)="onClassSelect(selectedClass)">
+                            <option selected>Choisissez la classe </option>
+                            <option *ngFor="let classRoom of this.classRoomData" [ngValue]="classRoom"> {{classRoom.name}} </option>
+                        </select>
+                    </div>
+                    <div class="col-3">
+
+                    </div>
+
+                </div>
+            </div>
+
+            <form id="presenceForm">
+                <h4>Liste des Étudiants</h4>
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                    <tr>
+                        <th>#</th>
+                        <th>Nom de l'Étudiant</th>
+                        <th>Statut</th>
+
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="selectedClass">
+
+                    <tr *ngFor="let student of filteredStudents;let index = index">
+                        <td>{{index + 1}}</td>
+                        <td>{{student.lastName}}</td>
+                        <td>
+                            <select class="form-select status-select" name="status" [(ngModel)]="student.status" required>
+                                <option value="Présent">Présent</option>
+                                <option value="Absent">Absent</option>
+                                <option value="En Retard">En Retard</option>
+                            </select>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+                <button type="submit" class="btn btn-primary btn-save" (click)="savePresences()">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<!--  ----------------------------------- Pop Up Seance Details -------------------------  -->
