@@ -30,6 +30,13 @@ import { OngletBulletinComponent } from './onglet-bulletin/onglet-bulletin.compo
 import { OngletNotesComponent } from './onglet-notes/onglet-notes.component';
 import { PlanningComponent } from './planning/planning.component';
 import { OngletSeanceComponent } from './onglet-seance/onglet-seance.component';
+import { OngletPresenceComponent } from './onglet-presence/onglet-presence.component';
+import { PeriodSetupComponent } from './period-setup/period-setup.component';
+import { PaiementComponent } from './paiement/paiement.component';
+import { OngletPaiementDashboardComponent } from './onglet-paiement-dashboard/onglet-paiement-dashboard.component';
+import { OngletPaiementHistoriqueComponent } from './onglet-paiement-historique/onglet-paiement-historique.component';
+import { OngletPaiementAjoutComponent } from './onglet-paiement-ajout/onglet-paiement-ajout.component';
+import { OngletPaiementRetardComponent } from './onglet-paiement-retard/onglet-paiement-retard.component';
 
 
 @NgModule({
@@ -68,6 +75,13 @@ import { OngletSeanceComponent } from './onglet-seance/onglet-seance.component';
     OngletNotesComponent,
     PlanningComponent,
     OngletSeanceComponent,
+    OngletPresenceComponent,
+    PeriodSetupComponent,
+    PaiementComponent,
+    OngletPaiementDashboardComponent,
+    OngletPaiementHistoriqueComponent,
+    OngletPaiementAjoutComponent,
+    OngletPaiementRetardComponent,
 
 
   ],

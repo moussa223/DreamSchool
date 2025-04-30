@@ -1,0 +1,95 @@
+<h1 style="text-align:center;">📊 Tableau de bord des paiements</h1>
+<div class="dashboard">
+    <div class="card">
+        <h3>
+            Total des paiements reçus
+        </h3>
+        (Scolarité,Transport, Cantine)
+        <p>{{ totalMontantPaye | number:'1.0-0' }} F CFA</p>
+    </div>
+    <div class="card">
+        <h3>Total restant dû</h3>
+        (Pour toutes les périodes)
+        <p>{{ getTotalRestantGlobal() | number:'1.0-0' }} F CFA</p>
+    </div>
+    <div class="card">
+        <h3>Élèves en retard</h3>
+        (Toutes périodes confondues)
+        <p>{{ getNombreTotalElevesEnRetardGlobal() }}</p>
+    </div>
+    <div class="card">
+        <h3>Paiements aujourd'hui</h3>
+        (Total des paiements du jour)
+        <p>{{ getTotalPaiementsDuJour() | number }} FCFA</p>
+    </div>
+</div>
+
+<!-- --------------------------------------------------------------------------  -->
+<table>
+    <thead>
+    <tr>
+        <th>Année</th>
+        <th>Classe</th>
+        <th>Montant Annuel</th>
+        <th>Reste Dû</th>
+        <th>Élèves en retard</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let periode of periodData">
+        <td>{{ periode.anneeScolaire }}</td>
+        <td>{{ periode.className }}</td>
+        <td>{{ periode.montantAnnuel | number:'1.0-0' }} F CFA</td>
+        <td>{{ getTotalRestantDuPeriode(periode) | number:'1.0-0' }} F CFA</td>
+        <td>
+            <ul>
+                <li *ngFor="let eleve of getElevesEnRetardParPeriode(periode)">
+                    {{ eleve.lastName }} {{ eleve.firstName }} - {{ eleve.montantRestant | number:'1.0-0' }} F CFA
+                </li>
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- --------------------------------------------------------------------------  -->
+
+<div *ngFor="let periode of periodData">
+    <h3>{{ periode.className }} - {{ periode.anneeScolaire }}</h3>
+
+    <div *ngFor="let detail of getElevesEnRetardDetailsParTrimestre(periode)">
+        <strong>{{ detail.trimestre }} ({{ detail.eleves.length }} en retard)</strong>
+        <ul>
+            <li *ngFor="let eleve of detail.eleves">
+                {{ eleve.nom }} - reste à payer : {{ eleve.montantRestant }} F
+            </li>
+        </ul>
+    </div>
+    <!-- Pour afficher le nombre total d'élèves en retard d'une période -->
+    <span>Élèves en retard ({{ getNombreTotalElevesEnRetardParPeriode(periode) }})</span>
+</div>
+
+
+
+<!-- --------------------------------------------------------------------------  -->
+
+<table class="table table-bordered">
+    <thead>
+    <tr>
+        <th>Élève</th>
+        <th>Montant payé</th>
+        <th>Date de paiement</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let paiement of getPaiementsDuJour()">
+        <td>{{ paiement.nomEleve }}</td>
+        <td>{{ paiement.montantPaye }} FCFA</td>
+        <td>{{ paiement.dateDePaiement | date:'shortDate' }}</td>
+    </tr>
+    </tbody>
+</table>
+<div class="card">
+    <h3>Paiements du jour (total)</h3>
+    <p>{{ getTotalPaiementsDuJour() | number }} FCFA</p>
+</div>

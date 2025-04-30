@@ -1,0 +1,45 @@
+<div class="dashboard">
+    <app-sidebare></app-sidebare>
+    <div class="content">
+        <p id="textDashboard">
+            Paiement
+        </p>
+        <div class="info-container">
+            <div class= "container">
+                <div class="tabbed-content">
+                    <div class="tabs">
+                        <div
+                                class="tab"
+                                *ngFor="let tab of tabs"
+                                [class.active]="tab === activeTab"
+                                (click)="setActiveTab(tab)"
+                        >
+                            {{ tab }}
+                        </div>
+                    </div>
+                    <div class="contentt">
+                        <!-- Contenu de l'onglet 1 -->
+                        <div *ngIf="activeTab === 'Dashboard'">
+                            <app-onglet-paiement-dashboard></app-onglet-paiement-dashboard>
+                        </div>
+
+                        <!-- Contenu de l'onglet 2 -->
+                        <div *ngIf="activeTab === 'Historique'">
+                            <app-onglet-paiement-historique></app-onglet-paiement-historique>
+                        </div>
+
+                        <!-- Contenu de l'onglet 3 -->
+                        <div *ngIf="activeTab === 'Ajouter'">
+                            <app-onglet-paiement-ajout></app-onglet-paiement-ajout>
+                        </div>
+
+                        <!-- Contenu de l'onglet 4 -->
+                        <div *ngIf="activeTab === 'Retard'">
+                            <app-onglet-paiement-retard></app-onglet-paiement-retard>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

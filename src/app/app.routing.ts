@@ -18,6 +18,8 @@ import {AdmissionComponent} from "./admission/admission.component";
 import {AuthGuard} from "./auth.guard";
 import {CoursComponent} from "./cours/cours.component";
 import {PlanningComponent} from "./planning/planning.component";
+import {PeriodSetupComponent} from "./period-setup/period-setup.component";
+import {PaiementComponent} from "./paiement/paiement.component";
 
 const routes: Routes =[
   {
@@ -85,6 +87,16 @@ const routes: Routes =[
   {
     path: 'Cours',
     component: CoursComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Period',
+    component: PeriodSetupComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'Paiement',
+    component: PaiementComponent,
     canActivate: [AuthGuard]
   }
 ];

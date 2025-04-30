@@ -191,7 +191,7 @@ export class OngletSeanceComponent implements OnInit {
             id: 0,
             statut: status, // "Présent" ou "Absent"
             commentaires: '',
-            autres: '',
+            autres: this.selectedClass.name, // Je stocke le nom de la classe dans cette propriété "autres" car j'en aurai besoin
             seanceIds: [this.selectedSeance.id], // ID de la séance sélectionnée
             studentIds: studentIds             // Liste des étudiants pour ce statut
         };

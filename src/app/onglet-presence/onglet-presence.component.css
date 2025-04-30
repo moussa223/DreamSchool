@@ -1,0 +1,258 @@
+
+.dashboard {
+    display: flex;
+    height: auto; /* Ajout de la hauteur pour que le conteneur s'étende sur toute la page */
+}
+
+.content {
+    flex: 1;
+    width: 81%;
+    background-color: #006550!important;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Media query pour écran réduit */
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+    }
+    .content {
+        width: 100%; /* Les éléments prennent toute la largeur de l'écran réduit */
+    }
+
+}
+
+#textDashboard {
+    color: white;
+    padding-left: 30px;
+    padding-top: 20px;
+}
+
+.info-container {
+    background-color: #fff; /* Fond blanc */
+    border-radius: 10px; /* Ajout du border-radius pour les coins arrondis */
+    margin: 25px; /* Ajout d'un espace intérieur pour le contenu de la div */
+    flex: 1;
+    padding: 0 1cm;
+}
+/* --------------------------- Contenu du calendrier ci-dessous --------------------------- */
+/* Styles for the calendar */
+.calendar {
+    margin-top: 30px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    font-weight: bold;
+}
+
+.day {
+    text-align: center;
+}
+
+.dates {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.date {
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.date:hover {
+    background-color: #f0f0f0;
+}
+
+.date.empty {
+    background-color: #f0f0f0;
+    visibility: hidden;
+}
+
+/* Previous and Next buttons */
+button {
+    /* background-color: transparent; */
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Highlight the current day */
+.current-day {
+    background-color: #007bff;
+    color: white;
+}
+
+/*------------------------- Fin du contenu du calendrier ------------------------------------ */
+
+/*------------------------------------- popup.component.css ------------------------------------------*/
+.popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    max-height: 80vh; /* Limite la hauteur à 80% de la fenêtre */
+    overflow-y: auto; /* Ajoute une barre de défilement verticale si nécessaire */
+    border-radius: 8px; /* Coins arrondis pour un meilleur rendu */
+}
+
+
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+/* --------------------------------------------------------------------------------------------------- */
+
+/* -----------------  Style concernant le contenu du detail d'un planning -------------------*/
+
+body{
+    margin-top:20px;
+}
+.bg-light-gray {
+    background-color: #f7f7f7;
+}
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 2px;
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+
+.bg-sky.box-shadow {
+    box-shadow: 0px 5px 0px 0px #00a2a7
+}
+
+.bg-orange.box-shadow {
+    box-shadow: 0px 5px 0px 0px #af4305
+}
+
+.bg-green.box-shadow {
+    box-shadow: 0px 5px 0px 0px #4ca520
+}
+
+.bg-yellow.box-shadow {
+    box-shadow: 0px 5px 0px 0px #dcbf02
+}
+
+.bg-pink.box-shadow {
+    box-shadow: 0px 5px 0px 0px #e82d8b
+}
+
+.bg-purple.box-shadow {
+    box-shadow: 0px 5px 0px 0px #8343e8
+}
+
+.bg-lightred.box-shadow {
+    box-shadow: 0px 5px 0px 0px #d84213
+}
+
+
+.bg-sky {
+    background-color: #02c2c7
+}
+
+.bg-orange {
+    background-color: #e95601
+}
+
+.bg-green {
+    background-color: #5bbd2a
+}
+
+.bg-yellow {
+    background-color: #f0d001
+}
+
+.bg-pink {
+    background-color: #ff48a4
+}
+
+.bg-purple {
+    background-color: #9d60ff
+}
+
+.bg-lightred {
+    background-color: #ff5722
+}
+
+.padding-15px-lr {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.padding-5px-tb {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.margin-10px-bottom {
+    margin-bottom: 10px;
+}
+.border-radius-5 {
+    border-radius: 5px;
+}
+
+.margin-10px-top {
+    margin-top: 10px;
+}
+.font-size14 {
+    font-size: 14px;
+}
+
+.text-light-gray {
+    color: #d6d5d5;
+}
+.font-size13 {
+    font-size: 13px;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+.table td, .table th {
+    padding: .75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+
+/*-------------------------------------------------------------------------------------- */
+
+#PlanningByClass{
+    cursor: pointer;
+}
+#PlanningByClass:hover{
+    background-color: darkcyan;
+    color: ghostwhite;
+}
+/* ---------------------------------------------------------------------*/

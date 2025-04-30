@@ -41,6 +41,8 @@ export class PresenceService {
   private GetAllSeanceUrl = 'https://localhost:7012/api/Seance/GetAllSeances'; //  l'URL de l'endpoint
   // --------------------------------  Presence -----------------------------
   private AddPresenceUrl = 'https://localhost:7012/api/Presence/Create';
+  private GetAllPresenceUrl = 'https://localhost:7012/api/Presence/GetAllPresences'; //  l'URL de l'endpoint
+  private DeletePresenceUrl = 'https://localhost:7012/api/Presence/Delete';
   // --------------------------------------------------------------------
   constructor(private http: HttpClient) { }
   // ------------------ Create Seance --------------------------------
@@ -71,5 +73,25 @@ export class PresenceService {
     });
     // Appel POST vers la route "register" de l'API
     return this.http.post(this.AddPresenceUrl, this.PresenceModel, { headers });
+  }
+  // ---------------- Get All Presence ----------------------------------
+  getAllPresences(): Observable<any[]>{
+    // Récupérer le token depuis le local storage
+    const token = localStorage.getItem('usingsecretkeyforapp');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    return this.http.get<any[]>(`${this.GetAllPresenceUrl}`,{ headers });
+  }
+  // ---------------- Delete Presence ------------------------------------
+  DeletePresence(presenceId: number): Observable<any>{
+    // Récupérer le token depuis le local storage
+    const token = localStorage.getItem('usingsecretkeyforapp');
+    // Ajout du token dans le header de la réquête
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    // Appel de la méthode Http put UpdatePresence de l'API
+    return this.http.delete(`${this.DeletePresenceUrl}/${presenceId}`, {headers});
   }
 }

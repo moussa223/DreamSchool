@@ -1,0 +1,40 @@
+<div class="form-container">
+    <h2>💰 Enregistrer un Paiement</h2>
+    <form action="#" method="post">
+        <label for="student">Élève</label>
+        <select id="student" name="student" [(ngModel)]="paiementService.PaiementModel.paiementDto.NomEleve">
+            <option selected disabled>-- Sélectionner --</option>
+            <option *ngFor="let student of studentData" [ngValue]="student.lastName + ' ' + student.firstName">{{student.lastName}} {{student.firstName}}</option>
+        </select>
+
+        <label for="type">Type de frais</label>
+        <select id="type" name="type"  [(ngModel)]="paiementService.PaiementModel.paiementDto.typeDeFrais">
+            <option value="scolarité">Scolarité</option>
+            <option value="cantine">Cantine</option>
+            <option value="transport">Transport</option>
+        </select>
+
+        <label for="amount">Montant payé (€)</label>
+        <input type="text" id="amount" name="amount" placeholder="Ex: 150"
+               [(ngModel)]="paiementService.PaiementModel.paiementDto.montantPaye">
+
+        <label for="date">Date de paiement</label>
+        <input type="date" id="date" name="date"
+               [(ngModel)]="paiementService.PaiementModel.paiementDto.dateDePaiement">
+
+        <label for="reference">Période Scolaire</label>
+        <select id="period" name="type"  [(ngModel)]="paiementService.PaiementModel.paiementDto.periodScolaire">
+            <option *ngFor="let period of periodSetupData" [ngValue]="period.anneeScolaire">{{period.anneeScolaire}}</option>
+        </select>
+
+        <label for="reference">Commentaires</label>
+        <input type="text" id="Commentaire" name="reference" placeholder="Ex: RAS"
+               [(ngModel)]="paiementService.PaiementModel.paiementDto.commentaires">
+
+        <label for="reference">Référence (facultatif)</label>
+        <input type="text" id="reference" name="reference" placeholder="Ex: reçu_202504"
+               [(ngModel)]="paiementService.PaiementModel.paiementDto.reference">
+
+        <button type="submit" (click)="CreatePaiement()">Valider le paiement</button>
+    </form>
+</div>

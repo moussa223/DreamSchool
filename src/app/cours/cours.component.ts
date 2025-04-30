@@ -12,7 +12,7 @@ export class CoursComponent implements OnInit {
   isPopupOpen = false; // Le pop up d'ajout de classe est par défaut fermé
   selectedCourse: any | null = null;  // La classe selectionné parmi la liste des classes
 
-  constructor(private coursService: CoursService) { }
+  constructor(public coursService: CoursService) { }
 
   ngOnInit(): void {
     this.getAllCourses();

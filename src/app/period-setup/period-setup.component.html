@@ -1,0 +1,107 @@
+<div class="dashboard">
+    <app-sidebare></app-sidebare>
+    <div class="content">
+        <p id="textDashboard">
+            Period Setup
+        </p>
+        <div class="info-container">
+            <div class= "container">
+                <div class="tabs">
+                    <div
+                            class="tab"
+                            *ngFor="let tab of tabs"
+                            [class.active]="tab === activeTab"
+                            (click)="setActiveTab(tab)"
+                    >
+                        {{ tab }}
+                    </div>
+                </div>
+                <div class="contentt">
+                    <!-- Contenu de l'onglet 1 -->
+                    <div *ngIf="activeTab === 'Paramétrage des périodes'">
+                        <div class="setup-container">
+                            <h2>Planification des périodes de paiement scolaire</h2>
+                            <!-- dans la balise Form (submit)="CreatePeriod()" permet de declencher la reequête quand
+                             on appuie sur entrée -->
+                            <form class="period-form" >
+                                <!-- Année scolaire -->
+                                <label for="anneeScolaire">Année scolaire :</label>
+                                <select id="anneeScolaire" name="anneeScolaire" [(ngModel)]="periodService.PeriodModel.periodDto.anneeScolaire">
+                                    <option value="" disabled selected>Choisissez l'année scolaire</option>
+                                    <option>2025-2026</option>
+                                    <option>2027-2028</option>
+                                    <option>2028-2029</option>
+                                    <option>2029-2030</option>
+                                </select>
+
+                                <!-- Classe -->
+                                <label for="classe">Classe :</label>
+                                <select id="classe" name="classe" [(ngModel)]="periodService.PeriodModel.periodDto.className">
+                                    <option value="" disabled selected>Choisissez la classe</option>
+                                    <option *ngFor="let classe of classRoomData" [ngValue]="classe.name">{{classe.name}}</option>
+                                </select>
+
+                                <!-- Montant attendu -->
+                                <label for="montantAnnuel">Montant attendu annuel :</label>
+                                <input type="text" id="montantAnnuel" name="montantAnnuel" placeholder="Ex : 150000"
+                                [(ngModel)]="periodService.PeriodModel.periodDto.montantAnnuel">
+
+                                <!-- Dates limites Trimestres -->
+                                <label>Date limite Trimestre 1 :</label>
+                                <input type="date" name="trimestre1"
+                                [(ngModel)]="periodService.PeriodModel.periodDto.dateLimiteTrimestre1">
+
+                                <label>Date limite Trimestre 2 :</label>
+                                <input type="date" name="trimestre2"
+                                [(ngModel)]="periodService.PeriodModel.periodDto.dateLimiteTrimestre2">
+
+                                <label>Date limite Trimestre 3 :</label>
+                                <input type="date" name="trimestre3"
+                                [(ngModel)]="periodService.PeriodModel.periodDto.dateLimiteTrimestre3">
+
+                                <button type="submit" (click)="CreatePeriod()">Enregistrer</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Contenu de l'onglet 2 -->
+                    <div *ngIf="activeTab === 'Liste des périodes'">
+                        <div class="setup-container">
+                            <h2>Liste des périodes paramétrées</h2>
+                            <table class="period-table">
+                                <thead>
+                                <tr>
+                                    <th>Année</th>
+                                    <th>Classe</th>
+                                    <th>Montant annuel</th>
+                                    <th>Trimestre 1</th>
+                                    <th>Trimestre 2</th>
+                                    <th>Trimestre 3</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let period of periodData">
+                                    <td>{{period.anneeScolaire}}</td>
+                                    <td>{{period.className}}</td>
+                                    <td>{{period.montantAnnuel}}</td>
+                                    <td>{{period.dateLimiteTrimestre1}}</td>
+                                    <td>{{period.dateLimiteTrimestre2}}</td>
+                                    <td>{{period.dateLimiteTrimestre3}}</td>
+                                    <td>
+                                        <button class="edit">Modifier</button>
+                                        <button class="delete">Supprimer</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+<h3> Liste des absences et présences par Séance</h3>
+<table class="table caption-top">
+    <caption>Liste des absences et présences</caption>
+    <thead>
+    <tr>
+        <th scope="col">Seances</th>
+        <th scope="col">Stats</th>
+        <th scope="col">Informations</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let presence of PresenceData">
+        <td>{{presence.seances[0].name}}</td>
+        <td>{{presence.students.length}} élèves {{presence.statut}}s
+            <p *ngIf="presence.showText">
+                <b *ngFor="let student of presence.students">
+                    <li>
+                       {{student.lastName}} {{student.firstName}}
+                    </li>
+                </b>
+            </p>
+        </td>
+        <td>{{presence.commentaires}}</td>
+        <td>
+            <button class="btn btn-outline-primary ml-3" (click)="toggleText(presence)">
+                {{ presence.showText ? 'Masquer' : 'Afficher' }}
+            </button>
+            <button class="btn btn-outline-danger ml-3" (click)="selectPresenceToDelete(presence)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                    <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                </svg>
+            </button>
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+<ul *ngIf="!selectedClass">
+    <li id="PlanningByClass" *ngFor="let className of classesList" (click)="selectClass(className)">
+        {{ className }}
+    </li>
+</ul>
+<div *ngIf="selectedClass">
+    <button (click)="selectedClass = null">Retour</button>
+    <h3>Plannings pour la classe {{ selectedClass }}</h3>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Présence/Absence</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let presence of displayedPresences; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td><b>{{ presence.statut }}</b> au <b>{{ presence.seances[0].date }}</b></td>
+            <td>
+                <!-- Boutons d'action -->
+                <button class="btn btn-sm btn-outline-primary" >Voir</button>
+                <button class="btn btn-sm btn-outline-warning">Modifier</button>
+                <button class="btn btn-sm btn-outline-info" >Télécharger</button>
+                <button class="btn btn-sm btn-outline-danger" >Supprimer</button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Précédent</button>
+        <span>Page {{ currentPage }}</span>
+        <button (click)="changePage(currentPage + 1)" [disabled]="currentPage * itemsPerPage >= GroupedPresences[selectedClass!].length">Suivant</button>
+    </div>
+</div>
