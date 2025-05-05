@@ -1,0 +1,146 @@
+<div class="container py-5">
+    <h1 class="mb-4">Messages</h1>
+
+    <div class="d-flex justify-content-between mb-3">
+        <input type="text" class="form-control w-50" placeholder="Rechercher...">
+        <button class="btn btn-primary" (click)="openPopup()">+ Nouveau message</button>
+    </div>
+
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+        <tr>
+            <th>Titre</th>
+            <th>Catégorie</th>
+            <th>Public visé</th>
+            <th>Date publication</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let message of messageData">
+            <td>{{message.titre}}</td>
+            <td>{{message.categorie}}</td>
+            <td>{{message.destinataire}}</td>
+            <td>{{message.dateAjout}}</td>
+            <td>
+                <a class="btn btn-sm text-decoration-none" (click)="selectMessage(message)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                        <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z"/>
+                        <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
+                    </svg>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<!------------------- Pop up pour ajouter une classe ----------------------->
+<div class="background-overlay" *ngIf="isPopupOpen" (close)="closePopup()"></div>
+<div class="popup-container" *ngIf="isPopupOpen" (close)="closePopup()">
+    <div class="row">
+        <h2>Ajouter un message</h2>
+    </div>
+    <form>
+        <!-- Debut champs de formulaire ici -->
+        <div class="row">
+            <div class="col-sm mb-3">
+                <label class="form-label">Titre du message</label>
+                <input type="text" [(ngModel)]="messageService.messageModel.messageDto.titre" class="form-control" placeholder="Entrez le titre">
+            </div>
+            <div class="col-sm mb-3">
+                <label class="form-label">Catégorie</label>
+                <select class="form-select" [(ngModel)]="messageService.messageModel.messageDto.categorie">
+                    <option disabled>Sélectionnez la catégorie</option>
+                    <option>Administrative</option>
+                    <option>Pédagogique</option>
+                    <option>Événement</option>
+                    <option>Alerte</option>
+                </select>
+            </div>
+            <div class="col-sm mb-3">
+                <label class="form-label">Date d'ajout</label>
+                <input type="date" [(ngModel)]="messageService.messageModel.messageDto.dateAjout" class="form-control">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm mb-3">
+                <label class="form-label">Contenu du message</label>
+                <textarea class="form-control" rows="5"
+                          [(ngModel)]="messageService.messageModel.messageDto.contenu"
+                          placeholder="Écrivez le contenu ici..."></textarea>
+            </div>
+            <div class="col-sm mb-3">
+                <label class="form-label">Destinataire</label>
+                <select class="form-select"  [(ngModel)]="selectedDestinataires" multiple (change)="updateDestinatairesString()">
+                    <option>Tout le monde</option>
+                    <option>Enseignants</option>
+                    <option>Élèves</option>
+                    <option>Parents</option>
+                    <option>Classe de 6ème A</option>
+                    <option>Classe de Terminale D</option>
+                </select>
+                <small class="form-text text-muted">Maintenez Ctrl (Windows) ou Cmd (Mac) pour sélectionner plusieurs.</small>
+            </div>
+        </div>
+
+
+
+
+
+
+        <!-- Fin champs de formulaire -->
+        <button type="submit" class="btn btn-sm btn-success mr-2 mt-1" (click)="onSubmit()">Ajouter</button>
+        <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isPopupOpen" (click)="closePopup()">Annuler</button>
+    </form>
+</div>
+<!---------- Fin Pop up pour ajouter une Classe ------------->
+
+<!-- ----------------------------------- Zone Pop Up class Details -------------------------      -->
+<!-- Pop up pour voir les détails d'une classe -->
+<div class="background-overlay" *ngIf="isMessagePopUpOpen" (close)="CloseMessageDetailsPopUp()"></div>
+<div class="popup-container" *ngIf="isMessagePopUpOpen" (close)="CloseMessageDetailsPopUp()">
+    <div *ngIf="selectedMessage">
+        <h2>Détails du message
+            <button type="button" class="btn btn-md btn-danger mt-1" *ngIf="isMessagePopUpOpen" (click)="CloseMessageDetailsPopUp()"> Fermer
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                </svg>
+            </button>
+        </h2>
+
+        <div class="container py-5">
+            <h1 class="mb-3">{{selectedMessage.titre}}</h1>
+
+            <p class="text-muted mb-2">
+                <strong>Catégorie :</strong> {{selectedMessage.categorie}} |
+                <strong>Public visé :</strong> {{selectedMessage.destinataire}} |
+                <strong>Publiée le :</strong> {{selectedMessage.dateAjout}}
+            </p>
+
+            <div class="mb-4">
+                <p>
+                    {{selectedMessage.contenu}}
+                </p>
+            </div>
+
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-info" (click)="sendMessage()">
+                    Envoyer
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
+                    </svg>
+                </button>
+                <button class="btn btn-warning">Modifier</button>
+                <button class="btn btn-danger" (click)="selectMessageToDelete(selectedMessage)">Supprimer</button>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+<!--  ----------------------------------- Zone Pop Up class Details -------------------------  -->

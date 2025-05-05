@@ -37,6 +37,9 @@ import { OngletPaiementDashboardComponent } from './onglet-paiement-dashboard/on
 import { OngletPaiementHistoriqueComponent } from './onglet-paiement-historique/onglet-paiement-historique.component';
 import { OngletPaiementAjoutComponent } from './onglet-paiement-ajout/onglet-paiement-ajout.component';
 import { OngletPaiementRetardComponent } from './onglet-paiement-retard/onglet-paiement-retard.component';
+import { AnnonceComponent } from './annonce/annonce.component';
+import { OngletAnnonceListeComponent } from './onglet-annonce-liste/onglet-annonce-liste.component';
+import { OngletAnnonceCreationComponent } from './onglet-annonce-creation/onglet-annonce-creation.component';
 
 
 @NgModule({
@@ -82,6 +85,9 @@ import { OngletPaiementRetardComponent } from './onglet-paiement-retard/onglet-p
     OngletPaiementHistoriqueComponent,
     OngletPaiementAjoutComponent,
     OngletPaiementRetardComponent,
+    AnnonceComponent,
+    OngletAnnonceListeComponent,
+    OngletAnnonceCreationComponent,
 
 
   ],
