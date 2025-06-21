@@ -42,14 +42,17 @@ export class PeriodSetupComponent implements OnInit {
         (response) => {
           // Gérez la réponse de l'API ici
           console.log(response);
+          alert('Periode ajouté ! ');
+          window.location.reload();
         },
         (error) => {
           // Gérez les erreurs ici
           // console.error(error.error.message);
           console.error(error);
+          alert('Une erreur s est produite ! voir la console ');
         }
     );
-    window.location.reload();
+    
   }
   // ----------------------------------------------------------------------------------------
   getAllPeriods(){

@@ -16,6 +16,7 @@
 .vh-130{
     /* Première couleur utilisée verte aussi #199A83;    #006550!important;*/
     background-color: #199A83;
+    height: 100vh; /* Prend toute la hauteur visible de la fenêtre */
 }
 
 .link-info{

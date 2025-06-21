@@ -3,7 +3,7 @@
     background-color: #0E1B21 !important;
     color: white;
     width: 250px;
-    height: auto;
+    height: 100vh; /* Prend toute la hauteur visible de la fenêtre */
     position: sticky; /* rendre le sidebare static ne bouge pas même si on scrolle */
     top: 0; /* rendre le sidebare static ne bouge pas même si on scrolle */
 }

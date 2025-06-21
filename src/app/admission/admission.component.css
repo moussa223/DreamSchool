@@ -37,3 +37,77 @@
     padding: 0 1cm;
 }
 
+#div-search-filter{
+    height: 80px;
+    background-color: #ECEFEB;
+}
+
+.filter-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: #333; /* Couleur de l'icône */
+    font-size: 0; /* Masque le texte */
+}
+
+#input-search-class{
+    background: none;
+    border: none;
+    outline: none;
+    width: 150px;
+}
+#studentList{
+    cursor: pointer; /* Cette propriété permet d'avoir un curseur  icône de main à la place de la souris  */
+}
+/* ----------------------------- */
+/* popup.component.css */
+.popup-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+}
+
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+/* ---------------------------------- */
+/* ----------------- Style du champ ajout d'un dossier */
+/* admission.component.css */
+.create-folder-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.input {
+  flex: 1;
+  padding: 6px;
+}
+/* ----------------- Style du fil d'ariane navigation cliquable */
+.breadcrumb {
+  margin: 10px 0;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.breadcrumb-segment {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.breadcrumb-segment:hover {
+  text-decoration: underline;
+}
+

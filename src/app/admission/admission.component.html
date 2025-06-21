@@ -6,8 +6,94 @@
         </p>
         <div class="info-container">
             <div class= "container">
+                <div class="row" id="div-search-filter">
+                    <div class="col">
+                        <div class="vr"></div> <!-- A changer car j'ai l'impression que Div class vr n'est plus à jour  -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        </svg>
+                        <input type="text" [(ngModel)]="searchText" (input)="filterStudents()"  placeholder="Chercher un élève" id="input-search-class" aria-label="Username" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+                
+                <div id="studentList" *ngFor="let student of paginatedStudents" (click)="selectStudent(student)">
+                    <ul class="list-group">
+                        <li class="list-group-item" >{{ student.lastName}} {{student.firstName}}</li>
+                    </ul>
+                </div>
+                
 
+                <nav *ngIf="totalPages > 1" class="mt-3">
+                  <ul class="pagination">
+                    <li class="page-item" [class.disabled]="currentPage === 1">
+                      <a class="page-link" (click)="changePage(currentPage - 1)">Précédent</a>
+                    </li>
+                    <li class="page-item" *ngFor="let page of pages" [class.active]="page === currentPage">
+                      <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="currentPage === totalPages">
+                      <a class="page-link" (click)="changePage(currentPage + 1)">Suivant</a>
+                    </li>
+                  </ul>
+                </nav>
+                <button class="btn btn-success my-3" (click)="createMissingFolders()">
+                        Actualiser les dossiers
+                </button>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Pop Up Zone debut -->
+ <!-- Pop up pour ajouter un élève -->
+<div class="background-overlay" *ngIf="isPopupOpen" (close)="closePopup()"></div>
+<div class="popup-container" *ngIf="isPopupOpen" (close)="closePopup()">
+    <!-- Fil d'Ariane -->
+    <div *ngIf="currentPath" class="breadcrumb">
+    <span (click)="loadStudentFolderContentWithNavigation(selectedStudent.lastName, selectedStudent.firstName)" class="breadcrumb-segment">📁 {{ selectedStudent.lastName }}_{{ selectedStudent.firstName }}</span>
+    
+    <ng-container *ngFor="let part of getBreadcrumbParts().slice(1); let i = index">
+        <span> / </span>
+        <span class="breadcrumb-segment" (click)="fetchFolderContent(getFullPathUntil(i + 1))">{{ part }}</span>
+    </ng-container>
+    </div>
+
+    <!-- <div class="row">
+        <h2>Dossier de {{this.selectedStudent.lastName}} {{this.selectedStudent.firstName}}</h2>
+    </div> -->
+    <div class="create-folder-form">
+        <input [(ngModel)]="newFolderName" placeholder="Nom du nouveau dossier" class="input" />
+        <button class="btn btn-primary" (click)="createNewSubFolder()">Créer</button>
+    </div>
+    <div *ngIf="selectedStudentContent.length > 0">
+
+        <ul>
+            <li *ngFor="let item of selectedStudentContent" (click)="item.type === 'folder' && fetchFolderContent(currentPath + '/' + item.name)">
+                <span *ngIf="item.type === 'folder'">📁</span>
+                <span *ngIf="item.type === 'file'">📄</span>
+                {{ item.name }}
+            </li>
+        </ul>
+
+    </div>
+    <div *ngIf="selectedStudentContent.length == 0">
+    <!-- <h3>Contenu du dossier</h3> -->
+        Le Dossier est Vide !
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isPopupOpen" (click)="closePopup()">Fermer</button>
+        </div>
+        <div class="col-sm-10">
+            <div *ngIf="currentPath">
+                <!-- <h4>Uploader un fichier dans : {{ currentPath }}</h4> -->
+                <input class="mt-1" type="file" (change)="onFileSelected($event)">
+                <button class="btn btn-info" (click)="uploadSelectedFile()" [disabled]="!selectedFile">Uploader</button>
+            </div>    
+        </div>
+    </div>
+    
+
+</div>
+<!-- Fin du Pop up pour ajouter un élève -->

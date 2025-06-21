@@ -106,7 +106,32 @@ export class EleveService {
     // Appel de la méthode Http put UpdateStudent de l'API
     return this.http.delete(`${this.DeleteClassRoomFromStudentUrl}/${studentId}?ClassRoomId=${ClassRoomId}`, {headers});
   }
-  //
+  //---------------- Check or Create Folder for students Method -------------------------
+  createStudentFolders(students: any[]) {
+  return this.http.post<any[]>('https://localhost:7012/api/student/checkOrCreateFolders', students);
+  }
+  // -------------------------------------------------------------------------------
+  getFolderContent(path: string) {
+  return this.http.get<any[]>(`https://localhost:7012/api/student/folderContentAtPath?path=${encodeURIComponent(path)}`);
+  }
+  // -------------------------------------------------------------------------------
+  createSubFolder(parentPath: string, folderName: string) {
+    return this.http.post(`https://localhost:7012/api/student/createSubFolder?parentPath=${encodeURIComponent(parentPath)}&folderName=${folderName}`, {});
+  }
+  // -------------------------------------------------------------------------------
+  uploadFile(file: File, relativePath: string): Observable<any> {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("relativePath", relativePath); // <-- ce champ doit exactement s'appeler 'relativePath'
+
+  return this.http.post("https://localhost:7012/api/student/uploadFile", formData);
+  }
+
+  // -------------------------------------------------------------------------------
+  moveFile(sourcePath: string, destinationPath: string) {
+    return this.http.post(`https://localhost:7012/api/student/moveFile?sourcePath=${encodeURIComponent(sourcePath)}&destinationPath=${encodeURIComponent(destinationPath)}`, {});
+  }
+
 
 
 }

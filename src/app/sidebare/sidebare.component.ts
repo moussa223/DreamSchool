@@ -20,8 +20,8 @@ export class SidebareComponent implements OnInit {
     const jwtHelper = new JwtHelperService();
     // Décodez le token
     this.userData = jwtHelper.decodeToken(token);
-    console.log("l email du user est: "+this.userData.email);
-    console.log("Le nom du user est: "+this.userData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]);
+    // console.log("l email du user est: "+this.userData.email);
+    // console.log("Le nom du user est: "+this.userData["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]); // Affiche le nom de l'utilisateur
   }
 
 
