@@ -13,6 +13,22 @@ export class OngletNotesComponent implements OnInit {
   courseData: any; // Contient les infos de tous les cours de la base de données
   studentsData:any; // Contient les infos de tous les élèves de la Bdd
     NoteData:any; // Contient les infos de toutes les notes
+    selectedNote: any | null = null;
+    isUpdateNotePopUpOpen = false; //  Le pop up de fermeture de classe est par fermé par defaut
+    updatedNoteDto: any = { // modèle pour la modification d'une classe mais à voir si je peux directement utiliser classRoomModel.ClassRoomDto dans classe.service
+      id: 0,
+      date: '',
+      total: '',
+      noteObtenue: '',
+      commentaires: '',
+      autres: '',
+      studentIds: [
+        0 // Ex: si je remplace 0 par 1 , le premier cours de la liste sera selectionné par défaut
+      ],
+      courseIds: [
+        0 // Ex: si je remplace 0 par 1 , le premier cours de la liste sera selectionné par défaut
+      ]
+  };
 
   constructor(public noteService:NoteService, private coursService:CoursService,public eleveService:EleveService) { }
 
@@ -29,6 +45,13 @@ export class OngletNotesComponent implements OnInit {
   closePopup() {
     this.isAddNotePopupOpen = false;
   }
+  // ---------------------------------------
+  //------------------Selected Class-------------------------------------------------------------------------
+    selectNoteToUpdate(note: any): void {
+        this.selectedNote = note;
+        this.openUpdateNotePopup();
+        
+    }
   // ------------------------------------
   // Création d'une classe
   onSubmit() {
@@ -44,7 +67,7 @@ export class OngletNotesComponent implements OnInit {
     this.coursService.getAllCourses().subscribe(
         (courses) => {
           // Vous pouvez utiliser les données des étudiants ici
-          console.log(courses);
+          //console.log(courses);
           this.courseData = courses;
         },
         (error) => {
@@ -58,7 +81,7 @@ export class OngletNotesComponent implements OnInit {
         this.eleveService.getAllStudents().subscribe(
             (students) => {
                 // Vous pouvez utiliser les données des étudiants ici
-                console.log(students);
+                //console.log(students);
                 this.studentsData = students;
             },
             (error) => {
@@ -72,7 +95,7 @@ export class OngletNotesComponent implements OnInit {
     this.noteService.CreateNote().subscribe(
         (response) => {
           // Gérez la réponse de l'API ici
-          console.log(response);
+          //console.log(response);
         },
         (error) => {
           // Gérez les erreurs ici
@@ -86,7 +109,7 @@ export class OngletNotesComponent implements OnInit {
         this.noteService.getAllNotes().subscribe(
             (Notes) => {
                 // Vous pouvez utiliser les données des étudiants ici
-                console.log(Notes);
+                //console.log(Notes);
                 this.NoteData = Notes;
             },
             (error) => {
@@ -94,5 +117,31 @@ export class OngletNotesComponent implements OnInit {
                 console.error(error);
             }
         );
+    }
+    // Update Note Method
+    UpdateNote(){
+      this.updatedNoteDto.id = this.selectedNote.id; // L'id de la classe que je modifie ne change pas et dans l'objet Json aussi l'id est envoyé aussi
+        this.noteService.UpdateNote(this.selectedNote.id,this.updatedNoteDto).subscribe(
+            (response) => {
+                // Gérez la réponse de l'API ici
+                //console.log(response);
+                // fermeture du popup Après le traitement
+                this.closeUpdateNotePopup();
+                // Rechargez la page après une réponse réussie
+                window.location.reload();
+            },
+            (error) => {
+                // Gérez les erreurs ici
+                // console.error(error.error.message);
+                console.error(error);
+            }
+        );
+    }
+    // -------------Up date classRoom Pop Up -----------------------------------------------
+    openUpdateNotePopup() {
+        this.isUpdateNotePopUpOpen = true;
+    }
+    closeUpdateNotePopup() {
+        this.isUpdateNotePopUpOpen = false;
     }
 }

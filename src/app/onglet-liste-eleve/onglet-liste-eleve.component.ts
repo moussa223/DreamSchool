@@ -38,6 +38,9 @@ export class OngletListeEleveComponent implements OnInit {
             0
         ]
     };
+    searchTerm = '';
+    currentPage = 1;
+    itemsPerPage = 5;
 
     constructor(public eleveService:EleveService,public classeService:ClasseService,private router:Router) { }
 
@@ -51,7 +54,7 @@ export class OngletListeEleveComponent implements OnInit {
     this.eleveService.getAllStudents().subscribe(
         (students) => {
           // Vous pouvez utiliser les données des étudiants ici
-          console.log(students);
+          //console.log(students);
           this.studentsData = students;
           //console.log(this.studentsData[0].lastName);
             this.test = this.studentsData[0].lastName + " " + this.studentsData[0].firstName;
@@ -112,7 +115,7 @@ export class OngletListeEleveComponent implements OnInit {
         this.classeService.getAllClassRooms().subscribe(
             (classRooms) => {
                 // Vous pouvez utiliser les données des étudiants ici
-                console.log(classRooms);
+                //console.log(classRooms);
                 this.classRoomData = classRooms;
             },
             (error) => {
@@ -126,7 +129,7 @@ export class OngletListeEleveComponent implements OnInit {
         this.eleveService.CreateStudent().subscribe(
             (response) => {
                 // Gérez la réponse de l'API ici
-                console.log(response);
+                //console.log(response);
             },
             (error) => {
                 // Gérez les erreurs ici
@@ -141,7 +144,7 @@ export class OngletListeEleveComponent implements OnInit {
         this.eleveService.UpdateStudent(this.selectedStudent.id,this.updatedStudentDto).subscribe(
             (response) => {
                 // Gérez la réponse de l'API ici
-                console.log(response);
+                //console.log(response);
                 // fermeture du popup Après le traitement
                 this.closePopup();
                 // Rechargez la page après une réponse réussie
@@ -159,7 +162,7 @@ export class OngletListeEleveComponent implements OnInit {
         this.eleveService.AddClassRoomsToStudent(this.selectedStudent.id,this.eleveService.AddClassRoomToStudentModel.classRoomIds).subscribe(
             (response) => {
                 // Gérez la réponse de l'API ici
-                console.log(response);
+                //console.log(response);
                 // fermeture du popup Après le traitement
                 // this.closePopup();
                 this.closeAddClassRoomsToStudentPopup();
@@ -178,7 +181,7 @@ export class OngletListeEleveComponent implements OnInit {
         this.eleveService.DeleteStudent(this.selectedStudent.id).subscribe(
             (response) => {
                 // Gérez la réponse de l'API ici
-                console.log(response);
+                //console.log(response);
                 // Rechargez la page après une réponse réussie
                 // window.location.reload(); // Je l'ai mis en commentaire car avec delete la requête rentre dans le
                 // case Error je ne sais pas pourquoi mais je vais recharger la page en haut dans DeleteClass
@@ -195,7 +198,7 @@ export class OngletListeEleveComponent implements OnInit {
         this.eleveService.DeleteClassRoomFromStudent(this.selectedStudent.id,this.selectedStudentClassRooms.id).subscribe(
             (response) => {
                 // Gérez la réponse de l'API ici
-                console.log(response);
+                //console.log(response);
                 // fermeture du popup Après le traitement
                 this.closePopup();
                 // Rechargez la page après une réponse réussie
@@ -223,4 +226,43 @@ export class OngletListeEleveComponent implements OnInit {
     closeAddClassRoomsToStudentPopup(){
         this.isAddClassRoomsToStudentPopUpOpen = false;
     }
+    // -------------------------------------------------------------------------
+    // ----------------------------------------------------
+    get filteredStudents() {
+  if (!this.studentsData) return [];
+  if (!this.searchTerm) return this.studentsData;
+  const term = this.searchTerm.toLowerCase();
+  return this.studentsData.filter(c => c.lastName.toLowerCase().includes(term));
+}
+
+
+  // 📄 Pagination appliquée aux classes filtrées
+  get paginatedStudents() {
+  if (!this.filteredStudents || this.filteredStudents.length === 0) {
+    return [];
+  }
+  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  const endIndex = startIndex + this.itemsPerPage;
+  return this.filteredStudents.slice(startIndex, endIndex);
+}
+
+
+  // Nombre total de pages après filtre
+  get totalPages() {
+    return Math.ceil(this.filteredStudents.length / this.itemsPerPage);
+  }
+
+  // 🕹️ Navigation
+  nextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+
+  // 🔁 Remettre à la première page si on tape un nouveau mot
+  onSearchChange() {
+    this.currentPage = 1;
+  }
 }

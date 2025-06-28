@@ -12,40 +12,23 @@
         </button>
     </div>
     <div class="col-6">
-        <span id="nbr-classes">
+        <span id="nbr-classes"  *ngIf="studentsData">
             {{studentsData.length}} élèves
         </span>
         <div class="vr"></div>
-        <span>12 Enrollments</span>
         <div class="vr"></div>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
         </svg>
-        <input type="text"  placeholder="Chercher un élève" id="input-search-class" aria-label="Username" aria-describedby="basic-addon1">
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()"  placeholder="Chercher un élève" id="input-search-class" aria-label="Username" aria-describedby="basic-addon1">
     </div>
     <div class="col-4">
         <div class="row">
             <div class="col-5">
-                Filtre élève
-                <br>
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                        <button class="dropdown-item" type="button">Action</button>
-                        <button class="dropdown-item" type="button">Another action</button>
-                        <button class="dropdown-item" type="button">Something else here</button>
-                    </div>
-                </div>
+                
             </div>
             <div class="col-5">
-                <button type="button" class="btn btn-outline-dark">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
-                    </svg>
-                    Contact
-                </button>
+                
             </div>
         </div>
     </div>
@@ -127,7 +110,7 @@
         </svg>
     </div>
 
-    <div class="col-sm-3" id="cours-list" *ngFor="let student of this.studentsData" (click)="selectStudent(student)">
+    <div class="col-sm-3" id="cours-list" *ngFor="let student of paginatedStudents" (click)="selectStudent(student)">
         <div class="row">
             <div class="col-10" >
                 <b>
@@ -169,7 +152,12 @@
     <div class="col-sm-3">
     </div>
 </div>
-
+    <!-- Pagination -->
+                <div class="pagination">
+                  <button (click)="prevPage()" [disabled]="currentPage === 1">Précédent</button>
+                  <span>Page {{ currentPage }} / {{ totalPages }}</span>
+                  <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant</button>
+                </div>
 
 <!-- ----------------------------------- Zone Pop Up Student Details -------------------------      -->
 <!-- Pop up pour voir les détails d'un Student -->

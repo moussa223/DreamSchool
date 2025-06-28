@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {ClasseService} from "./classe.service";
 import {CoursService} from "../cours/cours.service";
 import {response} from "express";
+import { EleveService } from 'app/eleve/eleve.service';
 
 @Component({
   selector: 'app-classe',
@@ -31,22 +32,43 @@ export class ClasseComponent implements OnInit {
               0 // Ex: si je remplace 0 par 1 , le premier cours de la liste sera selectionné par défaut
           ]
   };
+  searchTerm = '';
+  currentPage = 1;
+  itemsPerPage = 5;
+  studentsData: any[] = []; // tableau des étudiants
 
-  constructor(public classeService:ClasseService, private coursService: CoursService, private router:Router) { }
+
+  constructor(public classeService:ClasseService, private coursService: CoursService, private router:Router, 
+    public eleveService:EleveService
+  ) { }
 
   ngOnInit(): void {
     this.getAllClassRooms();
     this.getAllCourses();
+    this.getAllStudents();
+  }
+  // ------------------- Get All Students --------------------------------------------
+  getAllStudents(){
+    this.eleveService.getAllStudents().subscribe(
+        (students) => {
+          // Vous pouvez utiliser les données des étudiants ici
+          this.studentsData = students;
+        },
+        (error) => {
+          // Gérez les erreurs ici
+          console.error(error);
+        }
+    );
   }
   // ----------------- get All ClassRooms-------------
   getAllClassRooms(){
     this.classeService.getAllClassRooms().subscribe(
         (classRooms) => {
           // Vous pouvez utiliser les données des étudiants ici
-          console.log(classRooms);
+          //console.log(classRooms);
           this.classRoomData = classRooms;
-          console.log(this.classRoomData[0].name);
-          this.test = this.classRoomData[0].levels + " " + this.classRoomData[0].name;
+          //console.log(this.classRoomData[0].name);
+          //this.test = this.classRoomData[0].levels + " " + this.classRoomData[0].name;
         },
         (error) => {
           // Gérez les erreurs ici
@@ -103,7 +125,7 @@ export class ClasseComponent implements OnInit {
         this.coursService.getAllCourses().subscribe(
             (courses) => {
                 // Vous pouvez utiliser les données des étudiants ici
-                console.log(courses);
+                //console.log(courses);
                 this.courseData = courses;
             },
             (error) => {
@@ -117,7 +139,7 @@ export class ClasseComponent implements OnInit {
       this.classeService.CreateClassRoom().subscribe(
           (response) => {
               // Gérez la réponse de l'API ici
-              console.log(response);
+              //console.log(response);
           },
           (error) => {
               // Gérez les erreurs ici
@@ -132,7 +154,7 @@ export class ClasseComponent implements OnInit {
         this.classeService.UpdateClassRoom(this.selectedClass.id,this.updatedClassRoomDto).subscribe(
             (response) => {
                 // Gérez la réponse de l'API ici
-                console.log(response);
+                //console.log(response);
                 // fermeture du popup Après le traitement
                 this.closePopup();
                 // Rechargez la page après une réponse réussie
@@ -150,7 +172,7 @@ export class ClasseComponent implements OnInit {
         this.classeService.AddToCoursesToClassRoom(this.selectedClass.id,this.classeService.AddCourseToClassRoomModel.courseIds).subscribe(
             (response) => {
                 // Gérez la réponse de l'API ici
-                console.log(response);
+                //console.log(response);
                 // fermeture du popup Après le traitement
                 // this.closePopup();
                 this.closeAddCoursesToClassPopup();
@@ -169,7 +191,7 @@ export class ClasseComponent implements OnInit {
         this.classeService.DeleteClassRoom(this.selectedClass.id).subscribe(
             (response) => {
                 // Gérez la réponse de l'API ici
-                console.log(response);
+                //console.log(response);
                 // fermeture du popup Après le traitement
                 this.closePopup();
                 // Rechargez la page après une réponse réussie
@@ -188,7 +210,7 @@ export class ClasseComponent implements OnInit {
         this.classeService.DeleteCourseFromClassRoom(this.selectedClass.id,this.selectedClassCourses.id).subscribe(
             (response) => {
                 // Gérez la réponse de l'API ici
-                console.log(response);
+                //console.log(response);
                 // fermeture du popup Après le traitement
                 this.closePopup();
                 // Rechargez la page après une réponse réussie
@@ -216,4 +238,49 @@ export class ClasseComponent implements OnInit {
     closeAddCoursesToClassPopup(){
       this.isAddCoursesToClassPopUpOpen = false;
     }
+    // ----------------------------------------------------
+    get filteredClasses() {
+  if (!this.classRoomData) return [];
+  if (!this.searchTerm) return this.classRoomData;
+  const term = this.searchTerm.toLowerCase();
+  return this.classRoomData.filter(c => c.name.toLowerCase().includes(term));
+}
+
+
+  // 📄 Pagination appliquée aux classes filtrées
+  get paginatedClasses() {
+  if (!this.filteredClasses || this.filteredClasses.length === 0) {
+    return [];
+  }
+  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  const endIndex = startIndex + this.itemsPerPage;
+  return this.filteredClasses.slice(startIndex, endIndex);
+}
+
+
+  // Nombre total de pages après filtre
+  get totalPages() {
+    return Math.ceil(this.filteredClasses.length / this.itemsPerPage);
+  }
+
+  // 🕹️ Navigation
+  nextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+
+  // 🔁 Remettre à la première page si on tape un nouveau mot
+  onSearchChange() {
+    this.currentPage = 1;
+  }
+  // ------------------------------------------------------
+  getStudentCountForClass(classId: number): number {
+  return this.studentsData.filter(student =>
+    student.classRooms && student.classRooms.some((c: any) => c.id === classId)
+  ).length;
+}
+
 }

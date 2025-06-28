@@ -27,6 +27,7 @@ export class NoteService {
   private GetNotesByIdUrl = 'https://localhost:7012/api/Note';
   private AddNoteUrl = 'https://localhost:7012/api/Note/Create';
   private GetAllNoteUrl = 'https://localhost:7012/api/Note/GetAllNotes'; //  l'URL de l'endpoint
+  private UpdateNoteUrl = 'https://localhost:7012/api/Note/Update';
   constructor(private http: HttpClient) { }
   // --------------------------Get All Notes------------------------
   getAllNotes(): Observable<any[]>{
@@ -68,6 +69,17 @@ export class NoteService {
     });
     // Appel POST vers la route "register" de l'API
     return this.http.post(this.AddNoteUrl, this.NoteModel, { headers });
+  }
+  // -----------------Update Note ------------------------------------
+  UpdateNote(noteId: number, updatedNoteDto: any): Observable<any>{
+    // Récupérer le token depuis le local storage
+    const token = localStorage.getItem('usingsecretkeyforapp');
+    // Ajout du token dans le header de la réquête
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+    // Appel de la méthode Http put UpdateClassRoom de l'API
+    return this.http.put(`${this.UpdateNoteUrl}/${noteId}`, updatedNoteDto, {headers});
   }
 }
 

@@ -1,27 +1,46 @@
 <h2>Liste des bulletins</h2>
-<p>Ajoutez,visualisez ou modifiez les bulletins ci-dessous</p>
+<p>Ajoutez,visualisez ou modifiez les bulletins ci-dessous</p> 
+ <div class="col-sm-3">
+            <button type="button" class="btn btn-sm btn-success mb-4" (click)="openAddBulletinPopup()">Ajouter un bulletin</button>
+        </div>
 <!--------------------------------------- debut Div  -------------------------------------->
-    <div class="row">
-        <div class="col-6">
-            <!--------------------------------------- Bare de recherche -------------------------------------->
-            <div class="input-group mb-4">
-                <div class="form-outline" data-mdb-input-init>
-                    <input type="search" id="form1" class="form-control" />
+        <div class="row">
+            <div class="col-12">
+                <!--------------------------------------- Bare de recherche -------------------------------------->
+                <div class="row" id="div-search-filter">
+                <div class="col-1">
+                    <button class="filter-button" id="filter-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                            <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+                        </svg>
+                    </button>
                 </div>
-                <button type="button" class="btn btn-primary" >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+                <div class="col-6">
+                    <span id="nbr-classes" >
+                        
+                    </span>
+                    <div class="vr"></div>
+                    <div class="vr"></div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
                     </svg>
-                </button>
+                    <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()"  placeholder="Chercher un bulletin" id="input-search-class" aria-label="Username" aria-describedby="basic-addon1">
+                </div>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-5">
+                            
+                        </div>
+                        <div class="col-5">
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
             <!---------------------------------------- Fin Bare de recherche  --------------------------------->
         </div>
-        <div class="col-3">
-
-        </div>
-        <div class="col-sm-3">
-            <button type="button" class="btn btn-sm btn-success mb-4" (click)="openAddBulletinPopup()">Ajouter un bulletin</button>
-        </div>
+        
+       
     </div>
 <!--------------------------------------- fin div -------------------------------------->
 <!---------------------------------------- Debut tableau contenant la liste des bulletins -------------------------->
@@ -38,7 +57,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let bulletin of bulletinData; let index = index" [attr.data-id]="index">
+    <tr *ngFor="let bulletin of paginatedBulletins; let index = index" [attr.data-id]="index">
         <th scope="row">{{index + 1}}</th>
         <td>{{bulletin.titre}}</td>
         <td>{{bulletin.students[0].lastName}} {{bulletin.students[0].firstName}} </td>
@@ -52,7 +71,7 @@
                     <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0"/>
                 </svg>
             </button>
-            <button type="button" class="btn btn-sm btn-outline-warning mr-2" >
+            <button type="button" class="btn btn-sm btn-outline-warning mr-2" (click)="selectBulletinToUpdate(bulletin)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                     <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                 </svg>
@@ -62,7 +81,7 @@
                     <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm8.5 2.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z"/>
                 </svg>
             </button>
-            <button type="button" class="btn btn-sm btn-outline-danger" >
+            <button type="button" class="btn btn-sm btn-outline-danger" (click)="selectBulletinToDelete(bulletin)">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
@@ -72,7 +91,12 @@
     </tr>
 </table>
 <!---------------------------------------- Fin tableau contenant la liste des bulletins -------------------------->
-
+<!-- Pagination -->
+                <div class="pagination">
+                  <button (click)="prevPage()" [disabled]="currentPage === 1">Précédent</button>
+                  <span>Page {{ currentPage }} / {{ totalPages }}</span>
+                  <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant</button>
+                </div>
 <!------------------------------------------ Pop up pour ajouter un bulletin --------------------------------------->
 <div class="background-overlay" *ngIf="isAddBulletinPopupOpen" (close)="closePopup()"></div>
 <div class="popup-container" *ngIf="isAddBulletinPopupOpen" (close)="closePopup()">
@@ -130,13 +154,13 @@
                         <!-- This is our clonable table line -->
                         <tr>
                             <th class="text-center">Moyenne</th>
-                            <td class="pt-3-half" contenteditable="true">
+                            <td class="pt-3-half" contenteditable="false">
                                 <input type="text" class="form-control mb-1 btn-sm" id="StudentMoyenne" [(ngModel)]="bulletinService.bulletinModel.bulletinDto.moyenne" placeholder="Moyenne de l'élève">
                             </td>
                         </tr>
                         <tr>
                             <th class="text-center">Rang</th>
-                            <td class="pt-3-half" contenteditable="true">
+                            <td class="pt-3-half" contenteditable="false">
                                 <input type="text" class="form-control mb-1 btn-sm" id="StudentRang" [(ngModel)]="bulletinService.bulletinModel.bulletinDto.rang" placeholder="Classement de l'élève">
                             </td>
                         </tr>
@@ -224,4 +248,133 @@
         <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isGetBulletinPopupOpen" (click)="closeGetPopup()">Fermer</button>
     </form>
 </div>
-<!------------------------------------------------------ Pop up pour ajouter un bulletin ----------------------------------->
+<!------------------------------------------------------ Fin Pop up pour voir  un bulletin ----------------------------------->
+
+<!------------------------------------------ Pop up pour Modifier un bulletin --------------------------------------->
+<div class="background-overlay" *ngIf="isUpdateBulletinPopUpOpen" (close)="closeUpdateBulletinPopup()"></div>
+<div class="popup-container" *ngIf="isUpdateBulletinPopUpOpen" (close)="closeUpdateBulletinPopup()">
+    <div class="row">
+        <h3>Modification du Bulletin</h3>
+    </div>
+    <form>
+        <!-- champs de formulaire ici -->
+        <div class="row">
+            <div class="col-sm-6 mb-1">
+                <label for="form-control">Valeur actuelle: {{selectedBulletin.titre}}</label>
+                <input type="text" class="form-control mb-1 btn-sm" [(ngModel)]="updatedBulletinDto.titre" id="StudentLastName" placeholder="Titre du bulletin">
+            </div>
+            <div class="col-sm-6 mb-1">
+                <label for="form-control">Valeur actuelle: {{selectedBulletin.date}}</label>
+                <input type="Date" class="form-control mb-1 btn-sm" id="BulletinDate" [(ngModel)]="updatedBulletinDto.date" placeholder="Date">
+            </div>
+            <div class="col-sm-6 mb-1">
+                <p class="mb-1 btn-sm">{{selectedBulletin.students[0].lastName}} {{selectedBulletin.students[0].firstName}}</p>
+                <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedStudent" (change)="selectStudent(selectedStudent)">
+                    <option selected>Selectionnez l'élève concerné</option>
+                    <option *ngFor="let student of this.studentsData" [ngValue]="student">{{student.lastName}}  {{student.firstName}}</option>
+                </select>
+            </div>
+            <div class="col-sm-6 mb-1">
+                <label for="form-control">Valeur actuelle: {{selectedBulletin.remarque}}</label>
+                <input type="text" class="form-control mb-1 btn-sm" id="Remarque" [(ngModel)]="updatedBulletinDto.remarque" placeholder="Remarques">
+            </div>
+        </div>
+        <!-- Editable table -->
+        <div class="card">
+            <h4 class="card-header text-center font-weight-bold text-uppercase py-2">
+                Valeur actuelle
+            </h4>
+            <div class="card-body">
+                <div id="GetBulletintable" class="table-editable-2">
+                    <table class="table table-bordered table-responsive-md table-striped text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Matière</th>
+                            <th class="text-center">Notes</th>
+                            <th class="text-center">Coefficient</th>
+                            <th class="text-center">Autres</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let note of selectedBulletin.notes">
+                            <td class="pt-3-half" contenteditable="false">{{getCourseName(note.courseIds[0])}}</td>
+                            <td class="pt-3-half" contenteditable="true">
+                                {{note.noteObtenue}}
+                            </td>
+                            <td class="pt-3-half" contenteditable="false">{{getCourseCredits(note.courseIds[0])}}</td>
+                            <td class="pt-3-half" contenteditable="false">RAS</td>
+                        </tr>
+                        <!-- This is our clonable table line -->
+                        <tr>
+                            <th class="text-center">Moyenne</th>
+                            <td class="pt-3-half" contenteditable="false">
+                                <p class="form-control mb-1 btn-sm">{{selectedBulletin.moyenne}}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Rang</th>
+                            <td class="pt-3-half" contenteditable="false">
+                                <p class="form-control mb-1 btn-sm">{{selectedBulletin.rang}}</p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Editable table -->
+        <!-- Editable table -->
+        
+        <div class="card">
+            <h4 class="card-header text-center font-weight-bold text-uppercase py-2">
+                Nouvelle valeur du Bulletin de notes
+            </h4>
+            <div class="card-body">
+                <div id="table" class="table-editable">
+                    <table class="table table-bordered table-responsive-md table-striped text-center">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Matière</th>
+                            <th class="text-center">Notes</th>
+                            <th class="text-center">Coefficient</th>
+                            <th class="text-center">Autres</th>
+                        </tr>
+                        </thead>
+                        <tbody *ngIf="selectedStudent">
+                        <tr *ngFor="let studentClassRoomCourse of classRoomsData.courses">
+                            <td class="pt-3-half" contenteditable="false">{{studentClassRoomCourse.name}}</td>
+                            <td class="pt-3-half" contenteditable="true">
+                                <select class="form-select" aria-label="Default select example" [(ngModel)]="selectedNoteIds[studentClassRoomCourse.id]">
+                                    <option selected>Selectionnez la note obtenue par l'élève</option>
+                                    <option *ngFor="let studentNote of this.studentNotesData" [ngValue]="studentNote.id" > {{studentNote.noteObtenue}}/{{studentNote.total}} - {{studentNote.courses[0].name}}  obtenue le {{studentNote.date}}</option>
+                                </select>
+                            </td>
+                            <td class="pt-3-half" contenteditable="false">{{studentClassRoomCourse.credits}}</td>
+                            <td class="pt-3-half" contenteditable="false">RAS</td>
+                        </tr>
+                        <!-- This is our clonable table line -->
+                        <tr>
+                            <th class="text-center">Moyenne</th>
+                            <td class="pt-3-half" contenteditable="true">
+                                <input type="text" class="form-control mb-1 btn-sm" id="StudentMoyenne" [(ngModel)]="updatedBulletinDto.moyenne" placeholder="Moyenne de l'élève">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Rang</th>
+                            <td class="pt-3-half" contenteditable="true">
+                                <input type="text" class="form-control mb-1 btn-sm" id="StudentRang" [(ngModel)]="updatedBulletinDto.rang" placeholder="Classement de l'élève">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Editable table -->
+
+        <!-- champs de formulaire ici -->
+        <button type="submit" class="btn btn-sm btn-success mr-2 mt-1" (click)="onClickUpdateButton()">Modifier</button>
+        <button type="button" class="btn btn-sm btn-danger mt-1" *ngIf="isUpdateBulletinPopUpOpen" (click)="closeUpdateBulletinPopup()">Annuler</button>
+    </form>
+</div>
+<!------------------------------------------------------ Fin Pop up pour Modifier un bulletin ----------------------------------->

@@ -21,3 +21,23 @@
   z-index: 999;
 }
 /* ---------------------------------- */
+#div-search-filter{
+    height: 80px;
+    background-color: #ECEFEB;
+}
+
+.filter-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: #333; /* Couleur de l'icône */
+    font-size: 0; /* Masque le texte */
+}
+
+#input-search-class{
+    background: none;
+    border: none;
+    outline: none;
+    width: 150px;
+}

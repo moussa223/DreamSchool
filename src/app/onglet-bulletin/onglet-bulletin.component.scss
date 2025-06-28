@@ -29,3 +29,66 @@
   max-height: 200px; /* Ajustez cette valeur selon vos besoins */
   overflow-y: auto;
 }
+.table-editable-2{
+  max-height: 100px; /* Ajustez cette valeur selon vos besoins */
+  overflow-y: auto;
+}
+// -------------------- Barre de recherche ----------------------------------
+#div-search-filter{
+    height: 80px;
+    background-color: #ECEFEB;
+}
+
+.filter-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    color: #333; /* Couleur de l'icône */
+    font-size: 0; /* Masque le texte */
+}
+
+#input-search-class{
+    background: none;
+    border: none;
+    outline: none;
+    width: 150px;
+}
+
+/* --------------------------------------------------------------------------------------------------- */
+/* style de la pagination  */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
